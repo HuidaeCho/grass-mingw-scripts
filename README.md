@@ -11,3 +11,7 @@ Please refer to [How to compile GRASS GIS on MS Windows](https://idea.isnew.info
 ## Just Extract Daily Builds to C:\
 
 My solution was to build it myself daily and deploy it to a shared folder so they can extract it to their C drive. This is possible because MS Windows allows non-administrators to create new folders in the root of the C drive (but not new files there). You can download the latest daily build of GRASS GIS from [here](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html#latest-daily-build).
+
+## Official Daily Builds from the GRASS GIS Development Team
+
+Please note that these scripts compile a personal daily build. Official daily builds from the GRASS GIS development team are available from [here](https://grass.osgeo.org/download/software/ms-windows/).
