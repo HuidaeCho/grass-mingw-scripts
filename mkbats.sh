@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+GRASS_VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
 if [ -d /c/osgeo4w64 ]; then
 	OSGEO4W_ROOT='C:\OSGeo4W64'
 elif [ -d /c/osgeo4w ]; then
@@ -27,6 +29,6 @@ HOME_ESCAPED=`echo $HOME_ESCAPED | sed 's#//*#\\\\\\\\#g'`
 (
 sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$OSGEO4W_ROOT_ESCAPED'\\bin\2\nSET HOME='$HOME_ESCAPED'/' \
     -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "%HOME%\\usr\\grass\\bin\\env.bat"/' \
-    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1%HOME%\\usr\\grass\\grass\\bin.'$MINGW_CHOST'\\grass79.py\2/' \
+    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1%HOME%\\usr\\grass\\grass\\bin.'$MINGW_CHOST'\\grass'$GRASS_VERSION'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > ~/usr/grass/bin/grass79.bat
+) > ~/usr/grass/bin/grass$GRASS_VERSION.bat
