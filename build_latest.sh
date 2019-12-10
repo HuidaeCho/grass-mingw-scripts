@@ -14,5 +14,5 @@ git merge master
 make clean
 ../myconfigure.sh
 ../mymake.sh
-../deploy.sh
+../package.sh
 ) > ~/usr/grass/update.log 2>&1
