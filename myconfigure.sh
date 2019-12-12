@@ -1,4 +1,7 @@
 #!/bin/sh
+# This script configures include/Make/Platform.make and other files for
+# building GRASS GIS.
+
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
 ./myconfigure \

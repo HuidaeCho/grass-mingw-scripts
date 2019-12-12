@@ -1,4 +1,7 @@
 #!/bin/sh
+# This script creates batch files for starting up GRASS GIS from
+# ~/usr/grass/grass.
+
 set -e
 GRASS_VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
 if [ -d /c/osgeo4w64 ]; then

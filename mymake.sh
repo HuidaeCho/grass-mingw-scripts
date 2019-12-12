@@ -1,4 +1,6 @@
 #!/bin/sh
+# This script builds GRASS GIS.
+
 test -e ~/usr/grass/bin || mkdir ~/usr/grass/bin
 
 cat<<'EOT'> ~/usr/grass/bin/python

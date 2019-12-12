@@ -1,4 +1,7 @@
 #!/bin/sh
+# This script packages already built GRASS GIS as a standalone ZIP file that
+# can be extracted to C:\OSGeo4W64.
+
 set -e
 GRASS_VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
 if [ -d /c/OSGeo4W64 ]; then
