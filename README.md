@@ -63,17 +63,13 @@ Now, you're ready to build GRASS GIS and don't need to repeat these steps again.
 
 ### Building the Latest Master Branch
 
-Start `MSYS2 MinGW 64-bit` and run the following commands:
-```
-cd ~/usr/grass/grass
-../build_latest_master.sh
-```
+Start `MSYS2 MinGW 64-bit` and run `~/usr/grass/build_latest_master.sh`.
 
 The `build_latest_master.sh` will build the latest master branch of the official GRASS GIS repository in `~/usr/grass/grass/dist.x86_64-w64-mingw32` and package it as `~/usr/grass/grass79.zip`, which you can simply extract to `C:\OSGeo4W64` on other computers without administrative rights.
 
 ### Building the Latest HCho Branch
 
-If you want to build the latest hcho branch of my personal repository that includes all my personal changes that may not have been merged into the official repository yet, change `https://github.com/OSGeo/grass.git` to `https://github.com/HuidaeCho/grass.git` in step 5 and run `../build_latest_hcho.sh`.
+If you want to build the latest hcho branch of my personal repository that includes all my personal changes that may not have been merged into the official repository yet, change `https://github.com/OSGeo/grass.git` to `https://github.com/HuidaeCho/grass.git` in step 5 and run `~/usr/grass/build_latest_hcho.sh`.
 
 ### Scheduling Daily Builds
 
@@ -85,5 +81,5 @@ You can run `build_latest_master.sh` automatically overnight to keep the build u
 4. Select `Daily` and click `Next`.
 5. Set your preferred start time and click `Next`.
 6. Select `Start a program` and click `Next`.
-7. Set `Program/script` to `C:\msys64\usr\bin\bash.exe`, `Add arguments` to `-l grass_update.sh`, and click `Next`.
+7. Set `Program/script` to `C:\msys64\usr\bin\bash.exe`, `Add arguments` to `-l ~/usr/grass/build_latest_master.sh`, and click `Next`.
 8. Click `Finish`.
