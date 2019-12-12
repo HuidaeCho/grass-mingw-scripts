@@ -1,8 +1,12 @@
 # GRASS MinGW Scripts
 
-This repository contains MinGW scripts for building GRASS GIS on MS Windows.
+This repository contains MinGW scripts for building GRASS GIS on MS Windows. These scripts do not support 32-bit systems.
 
 Please refer to [How to compile GRASS GIS on MS Windows](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html) to see why I created these scripts in the first place, but I found another use case.
+
+## Official Daily Builds from the GRASS GIS Development Team
+
+Please note that these scripts compile a personal daily build. Official daily builds from the GRASS GIS development team are available from [here](https://grass.osgeo.org/download/software/ms-windows/).
 
 ## OSGeo4W Installation Without Administrative Rights
 
@@ -12,13 +16,9 @@ Please refer to [How to compile GRASS GIS on MS Windows](https://idea.isnew.info
 
 My solution was to build it myself daily and deploy it to a shared folder so they can extract it to their C drive. This is possible because MS Windows allows non-administrators to create new folders in the root of the C drive (but not new files there). You can download the latest daily build of GRASS GIS from [here](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html#latest-daily-build).
 
-## Official Daily Builds from the GRASS GIS Development Team
-
-Please note that these scripts compile a personal daily build. Official daily builds from the GRASS GIS development team are available from [here](https://grass.osgeo.org/download/software/ms-windows/).
-
 ## How to Compile the Latest Version of GRASS GIS
 
-These scripts do not support 32-bit systems.
+Again, 32-bit systems are not supported.
 
 ### Preparing a Building Environment
 
