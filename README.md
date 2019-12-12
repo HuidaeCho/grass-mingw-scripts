@@ -35,11 +35,11 @@ Again, 32-bit systems are not supported.
    * zstd-devel
 2. Install [MSYS2](https://www.msys2.org/) to `C:\msys64`.
 3. Start `MSYS2 MinGW 64-bit` and run the following command:
-   ```
+   ```bash
    pacman -S tar libintl make bison diffutils git dos2unix zip mingw-w64-x86_64-toolchain mingw-w64-x86_64-cairo mingw-w64-x86_64-python3-six
    ```
 4. Add `C:\OSGeo4W64\bin` to `$PATH`:
-   ```
+   ```bash
    cat <<EOT >> ~/.bash_profile
    export LC_ALL=C
    export PATH="$PATH:/c/osgeo4w64/bin"
@@ -47,7 +47,7 @@ Again, 32-bit systems are not supported.
    . ~/.bash_profile
    ```
 5. Clone this repository and GRASS GIS repository:
-   ```
+   ```bash
    mkdir ~/usr
    cd ~/usr
    git clone https://github.com/HuidaeCho/grass-mingw-scripts.git grass
