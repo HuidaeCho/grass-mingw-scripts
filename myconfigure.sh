@@ -6,7 +6,6 @@ OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
 --with-nls \
 --with-includes=/c/osgeo4w64/include \
 --with-libs='/c/osgeo4w64/lib /c/osgeo4w64/bin' \
---with-proj-share=/c/osgeo4w64/share/proj \
 --with-gdal=$HOME/usr/grass/grass/mswindows/osgeo4w/gdal-config \
 --with-opengl=windows \
 --with-freetype-includes=/c/osgeo4w64/include/freetype2 \
