@@ -15,4 +15,5 @@ OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
 --with-geos=$HOME/usr/grass/grass/mswindows/osgeo4w/geos-config \
 --with-netcdf=$HOME/usr/grass/nc-config \
 --with-liblas=$HOME/usr/grass/grass/mswindows/osgeo4w/liblas-config \
+--with-bzlib \
 > myconfigure.log 2>&1
