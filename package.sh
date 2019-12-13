@@ -29,7 +29,7 @@ echo "set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%"
 
 OSGEO4W_ROOT_ESCAPED=`echo $OSGEO4W_ROOT | sed 's/\\\\/\\\\\\\\/g'`
 (
-sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$OSGEO4W_ROOT_ESCAPED'\\bin\2/' \
+sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
     -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
     -e 's/@POSTFIX@/'$GRASS_VERSION'/g' \
     mswindows/osgeo4w/grass.bat.tmpl
