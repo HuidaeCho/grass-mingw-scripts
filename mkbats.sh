@@ -3,12 +3,7 @@
 # ~/usr/grass/grass.
 
 set -e
-GRASS_VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
-if [ -d /c/osgeo4w64 ]; then
-	OSGEO4W_ROOT='C:\OSGeo4W64'
-elif [ -d /c/osgeo4w ]; then
-	OSGEO4W_ROOT='C:\OSGeo4W'
-fi
+OSGEO4W_ROOT='C:\OSGeo4W64'
 MSYS2_ROOT=`echo $WD | sed 's#\\\\usr.*##'`
 MINGW_ROOT=`echo "$MSYS2_ROOT$MINGW_PREFIX" | sed 's#/#\\\\#g'`
 
@@ -29,6 +24,7 @@ else
 	HOME_ESCAPED="$MSYS2_ROOT_ESCAPED/$HOME"
 fi
 HOME_ESCAPED=`echo $HOME_ESCAPED | sed 's#//*#\\\\\\\\#g'`
+GRASS_VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
 (
 sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$OSGEO4W_ROOT_ESCAPED'\\bin\2\nSET HOME='$HOME_ESCAPED'/' \
     -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "%HOME%\\usr\\grass\\bin\\env.bat"/' \

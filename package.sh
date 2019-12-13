@@ -3,15 +3,10 @@
 # can be extracted to C:\OSGeo4W64.
 
 set -e
-GRASS_VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
-if [ -d /c/OSGeo4W64 ]; then
-	OSGEO4W_ROOT='C:\OSGeo4W64'
-	OSGEO4W_MSYS_ROOT='/c/OSGeo4W64'
-elif [ -d /c/OSGeo4W ]; then
-	OSGEO4W_ROOT='C:\OSGeo4W'
-	OSGEO4W_MSYS_ROOT='/c/OSGeo4W'
-fi
+OSGEO4W_ROOT='C:\OSGeo4W64'
+OSGEO4W_MSYS_ROOT='/c/OSGeo4W64'
 GRASS_ROOT=$OSGEO4W_MSYS_ROOT/opt/grass
+GRASS_VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
 GRASS_ZIP=~/usr/grass/grass$GRASS_VERSION.zip
 
 test -e $GRASS_ROOT && rm -rf $GRASS_ROOT
