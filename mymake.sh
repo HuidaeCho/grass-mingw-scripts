@@ -8,6 +8,6 @@ cat<<'EOT'> ~/usr/grass/bin/python
 exec python3 "$@"
 EOT
 
-PATH="$HOME/usr/grass/bin:$PATH"
+export PATH="$HOME/usr/grass/bin:$PATH"
 
 make > mymake.log 2>&1
