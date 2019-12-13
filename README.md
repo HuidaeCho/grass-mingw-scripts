@@ -19,7 +19,7 @@ Again, 32-bit systems are not supported.
 ### Preparing a Building Environment
 
 1. Start a `cmd` window and run the following command to install [OSGeo4W](http://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe) to `C:\OSGeo4W64`:
-   ```
+   ```batch
    osgeo4w-setup-x86_64.exe -A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel
    ```
 2. Install [MSYS2](https://www.msys2.org/) to `C:\msys64`.
