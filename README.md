@@ -27,11 +27,11 @@ Again, 32-bit systems are not supported.
    ```bash
    pacman -S tar libintl make bison diffutils git dos2unix zip mingw-w64-x86_64-toolchain mingw-w64-x86_64-cairo mingw-w64-x86_64-python3-six
    ```
-4. Add `C:\OSGeo4W64\bin` to `$PATH`:
+4. Add `/mingw64/bin` and `/c/osgeo4w64/bin` to `$PATH`:
    ```bash
    cat <<EOT >> ~/.bash_profile
    export LC_ALL=C
-   export PATH="$PATH:/c/osgeo4w64/bin"
+   export PATH="/mingw64/bin:/c/osgeo4w64/bin:$PATH"
    EOT
    . ~/.bash_profile
    ```
