@@ -72,3 +72,15 @@ You can run `build_latest_master.sh` automatically overnight to keep the build u
 6. Select `Start a program` and click `Next`.
 7. Set `Program/script` to `C:\msys64\usr\bin\bash.exe`, `Add arguments` to `-l ~/usr/grass/build_latest_master.sh`, and click `Next`.
 8. Click `Finish`.
+
+## Autocompletion in the CMD Window
+
+GRASS GIS has a lot of command-line modules and I sometimes rely on autocompletion to find some module names in Linux. However, in MS Windows, the `cmd` window has limited autocompletion features compared to the bash shell and does not allow me to complete command names. You may want to replace the default shell with the MSYS shell by uncommenting `GRASS_SH` in `C:\OSGeo4W64\opt\grass\etc\env.bat`, but GRASS modules written in Python won't work because batch file wrappers cannot be executed properly from the MSYS shell. You would have to type full batch filenames including `.bat`, but, even then, it would fail with `@%GRASS_PYTHON%: command not found`. The MSYS shell cannot just handle batch files nicely.
+
+I found a great autocompletion utility called [Clink](http://mridgers.github.io/clink/). It runs with the `cmd` window and supports command name completion. The easiest way to run Clink with `cmd` is to use its autorun install.
+
+```batch
+clink_x64.exe autorun install
+```
+
+Clink will automatically run whenever you start `cmd`.
