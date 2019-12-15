@@ -35,4 +35,4 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
 cd $OSGEO4W_MSYS_ROOT/..
 OSGEO4W_BASENAME=`basename $OSGEO4W_MSYS_ROOT`
 test -e $GRASS_ZIP && rm -f $GRASS_ZIP
-zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*"
+zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"

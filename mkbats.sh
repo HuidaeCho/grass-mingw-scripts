@@ -18,7 +18,7 @@ echo "set PATH=$MINGW_ROOT\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%"
 
 OSGEO4W_ROOT_ESCAPED=`echo $OSGEO4W_ROOT | sed 's/\\\\/\\\\\\\\/g'`
 MSYS2_ROOT_ESCAPED=`echo $MSYS2_ROOT | sed 's/\\\\/\\\\\\\\/g'`
-if echo $HOME | grep '^/[a-z]\($\|/\)' > /dev/null; then
+if echo $HOME | grep -q '^/[a-z]\($\|/\)'; then
 	HOME_ESCAPED=`echo $HOME | sed 's#^/\(.\)#\1:/#'`
 else
 	HOME_ESCAPED="$MSYS2_ROOT_ESCAPED/$HOME"
