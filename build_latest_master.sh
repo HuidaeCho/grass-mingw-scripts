@@ -12,8 +12,7 @@ cd ~/usr/grass/grass
 git checkout master
 git fetch --all
 git merge upstream/master
-make clean
 ../myconfigure.sh
-../mymake.sh
+../mymake.sh clean default
 ../package.sh
 ) > ~/usr/grass/update.log 2>&1
