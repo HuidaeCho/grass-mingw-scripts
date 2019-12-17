@@ -10,4 +10,4 @@ EOT
 
 export PATH="$HOME/usr/grass/bin:$PATH"
 
-make > mymake.log 2>&1
+make "$@" > mymake.log 2>&1
