@@ -15,15 +15,25 @@ GRASS_ZIP=~/usr/grass/grass$GRASS_VERSION-$ARCH-$DATE.zip
 test -e $GRASS_PATH && rm -rf $GRASS_PATH
 test -e $OPT_PATH || mkdir -p $OPT_PATH
 cp -a dist.$ARCH $GRASS_PATH
-rm -f $GRASS_PATH/grass$GRASS_VERSION.tmp
+rm -f $GRASS_PATH/grass$GRASS_VERSION.tmp $GRASS_PATH/etc/fontcap
 cp -a bin.$ARCH/grass$GRASS_VERSION.py $GRASS_PATH/etc
 cp -a `ldd dist.$ARCH/lib/*.dll | awk '/mingw64/{print $3}' | sort -u | grep -v 'lib\(crypto\|ssl\)'` $GRASS_PATH/lib
 
 (
 sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
     mswindows/osgeo4w/env.bat.tmpl
-echo
-echo "set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%"
+cat<<EOT
+
+set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
+
+if not exist %GISBASE%\etc\fontcap (
+	pushd .
+	set GISRC=dummy
+	cd %GISBASE%\lib
+	%GISBASE%\bin\g.mkfontcap.exe
+	popd
+)
+EOT
 ) > $GRASS_PATH/etc/env.bat
 
 OSGEO4W_ROOT_ESCAPED=`echo $OSGEO4W_ROOT | sed 's/\\\\/\\\\\\\\/g'`
