@@ -1,5 +1,6 @@
 #!/bin/sh
-# This script builds the latest version of the hcho branch of
+# This script builds the latest version of the master branch of
+# https://github.com/OSGeo/grass.git or the hcho branch of
 # https://github.com/HuidaeCho/grass.git.
 
 set -e
@@ -8,11 +9,7 @@ export PATH="/mingw64/bin:$PATH"
 
 (
 cd ~/usr/grass/grass
-git checkout master
-git fetch --all
-git merge upstream/master
-git checkout hcho
-git merge master
+../merge.sh
 ../myconfigure.sh
 ../mymake.sh clean default
 ../package.sh
