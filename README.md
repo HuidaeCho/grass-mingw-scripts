@@ -1,8 +1,8 @@
 # MinGW scripts for building portable GRASS GIS on MS Windows
 
-This repository contains MinGW scripts for building portable GRASS GIS on 64-bit MS Windows. These scripts do not support 32-bit systems and will compile a personal daily build. Official daily builds from the GRASS GIS development team are available from [here](https://grass.osgeo.org/download/software/ms-windows/).
+This repository contains MinGW scripts for building portable GRASS GIS on 64-bit MS Windows. These scripts do not support 32-bit systems and will compile [a personal portable daily build](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html#latest-daily-build). Official daily builds from the GRASS GIS development team are available from [here](https://grass.osgeo.org/download/software/ms-windows/).
 
-Please refer to [How to compile GRASS GIS on MS Windows](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html) to see why I created these scripts in the first place, but I found another use case.
+Please refer to [How to compile GRASS GIS on MS Windows](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html) to see why I created these scripts in the first place, but I found another use case: portability with no administrative rights.
 
 See [grass-build-scripts](https://github.com/HuidaeCho/grass-build-scripts) for cross-compilation for MS Windows.
 
