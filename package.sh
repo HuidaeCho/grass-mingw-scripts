@@ -36,6 +36,7 @@ if not exist %GISBASE%\etc\fontcap (
 )
 EOT
 ) > $GRASS_PATH/etc/env.bat
+unix2dos $GRASS_PATH/etc/env.bat
 
 OSGEO4W_ROOT_ESCAPED=`echo $OSGEO4W_ROOT | sed 's/\\\\/\\\\\\\\/g'`
 (
@@ -44,6 +45,7 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
     -e 's/@POSTFIX@/'$GRASS_VERSION'/g' \
     mswindows/osgeo4w/grass.bat.tmpl
 ) > $GRASS_PATH/grass$GRASS_VERSION.bat
+unix2dos $GRASS_PATH/grass$GRASS_VERSION.bat
 
 cd $OSGEO4W_MSYS_ROOT/..
 OSGEO4W_BASENAME=`basename $OSGEO4W_MSYS_ROOT`
