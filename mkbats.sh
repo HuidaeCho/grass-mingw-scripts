@@ -25,11 +25,11 @@ else
 	HOME_ESCAPED="$MSYS2_ROOT_ESCAPED/$HOME"
 fi
 HOME_ESCAPED=`echo $HOME_ESCAPED | sed 's#//*#\\\\\\\\#g'`
-GRASS_VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
+VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 (
 sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$OSGEO4W_ROOT_ESCAPED'\\bin\2\nSET HOME='$HOME_ESCAPED'/' \
     -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "%HOME%\\usr\\grass\\bin\\env.bat"/' \
-    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1%HOME%\\usr\\grass\\grass\\bin.'$MINGW_CHOST'\\grass'$GRASS_VERSION'.py\2/' \
+    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1%HOME%\\usr\\grass\\grass\\bin.'$MINGW_CHOST'\\grass'$VERSION'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > ~/usr/grass/bin/grass$GRASS_VERSION.bat
-unix2dos ~/usr/grass/bin/grass$GRASS_VERSION.bat
+) > ~/usr/grass/bin/grass$VERSION.bat
+unix2dos ~/usr/grass/bin/grass$VERSION.bat
