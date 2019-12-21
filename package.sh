@@ -7,7 +7,7 @@ OSGEO4W_ROOT='C:\OSGeo4W64'
 OSGEO4W_MSYS_ROOT='/c/OSGeo4W64'
 OPT_PATH=$OSGEO4W_MSYS_ROOT/opt
 GRASS_PATH=$OPT_PATH/grass
-GRASS_VERSION=`sed -n '/^INST_DIR/{s/^INST_DIR.*grass//; p}' include/Make/Platform.make`
+GRASS_VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 ARCH=x86_64-w64-mingw32
 DATE=`date +%Y%m%d`
 GRASS_ZIP=~/usr/grass/grass$GRASS_VERSION-$ARCH-$DATE.zip
