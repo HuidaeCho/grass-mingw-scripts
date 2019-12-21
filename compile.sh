@@ -76,7 +76,7 @@ OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
 --with-netcdf=$HOME/usr/local/src/grass-mingw-scripts/nc-config \
 --with-liblas=$HOME/usr/local/src/grass/mswindows/osgeo4w/liblas-config \
 --with-bzlib \
-> /dev/stdout
+>> /dev/stdout
 
 make clean default
 
