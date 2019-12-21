@@ -27,7 +27,7 @@ Usage: compile.sh [OPTIONS]
 
 -h, --help               display this help message
     --pull               update the current branch
-    --package            package the cross-compiled build as
+    --package            package the compiled build as
                          grass79-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
 		exit
@@ -126,6 +126,7 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
 ) > $GRASS_PATH/grass$VERSION.bat
 unix2dos $GRASS_PATH/grass$VERSION.bat
 
+# package if requested
 if [ $package -eq 1 ]; then
 	rm -f grass*-$ARCH-*.zip
 	cd $OSGEO4W_MSYS_ROOT/..
