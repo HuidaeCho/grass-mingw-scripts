@@ -10,7 +10,7 @@ GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 ARCH=x86_64-w64-mingw32
 DATE=`date +%Y%m%d`
-GRASS_ZIP=~/usr/grass/grass$VERSION-$ARCH-$DATE.zip
+GRASS_ZIP=~/usr/grass/grass$VERSION-$ARCH-osgeo4w64-$DATE.zip
 
 test -e $GRASS_PATH && rm -rf $GRASS_PATH
 test -e $OPT_PATH || mkdir -p $OPT_PATH
