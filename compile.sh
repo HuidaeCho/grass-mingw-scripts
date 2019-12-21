@@ -128,7 +128,7 @@ unix2dos $GRASS_PATH/grass$VERSION.bat
 
 # package if requested
 if [ $package -eq 1 ]; then
-	rm -f grass*-$ARCH-*.zip
+	rm -f grass*-$ARCH-osgeo4w64-*.zip
 	cd $OSGEO4W_MSYS_ROOT/..
 	OSGEO4W_BASENAME=`basename $OSGEO4W_MSYS_ROOT`
 	zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"
