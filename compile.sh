@@ -25,10 +25,10 @@ for opt; do
 		cat<<'EOT'
 Usage: compile.sh [OPTIONS]
 
--h, --help               display this help message
-    --pull               update the current branch
-    --package            package the compiled build as
-                         grass79-x86_64-w64-mingw32-YYYYMMDD.zip
+-h, --help     display this help message
+    --pull     update the current branch
+    --package  package the compiled build as
+               grass79-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
 		exit
 		;;
