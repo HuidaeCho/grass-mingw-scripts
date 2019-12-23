@@ -69,6 +69,9 @@ fi
 
 # compile
 
+GRASS_MINGW_SCRIPTS=`dirname $0`
+GRASS_MINGW_SCRIPTS=`realpath $0`
+
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
 ./myconfigure \
@@ -80,7 +83,7 @@ OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
 --with-opengl=windows \
 --with-freetype-includes=/c/osgeo4w64/include/freetype2 \
 --with-geos=$GRASS_SOURCE/mswindows/osgeo4w/geos-config \
---with-netcdf=`dirname $0`/nc-config \
+--with-netcdf=$GRASS_MINGW_SCRIPTS/nc-config \
 --with-liblas=$GRASS_SOURCE/mswindows/osgeo4w/liblas-config \
 --with-bzlib \
 >> /dev/stdout
