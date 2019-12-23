@@ -1,21 +1,25 @@
 #!/bin/sh
-# This script creates batch files for starting up GRASS GIS from
-# ~/usr/grass/grass.
+# This script creates batch files for starting up GRASS GIS from the source
+# directory.
 
 set -e
-OSGEO4W_ROOT='C:\OSGeo4W64'
+. ${GRASSBUILDRC-~/.grassbuildrc}
+cd $GRASS_SRC
+
+OSGEO4W_ROOT_MSYS=$OSGEO4W64
+OSGEO4W_ROOT=`echo $OSGEO4W_ROOT_MSYS | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
 MSYS2_ROOT=`echo $WD | sed 's#\\\\usr.*##'`
 MINGW_ROOT=`echo "$MSYS2_ROOT$MINGW_PREFIX" | sed 's#/#\\\\#g'`
 
-test -e ~/usr/grass/bin || mkdir ~/usr/grass/bin
+test -e $BATCH_DIR || mkdir $BATCH_DIR
 
 (
 sed -e 's/^\(set GISBASE=\).*/\1%HOME%\\usr\\grass\\grass\\dist.'$MINGW_CHOST'/' \
     mswindows/osgeo4w/env.bat.tmpl
 echo
 echo "set PATH=$MINGW_ROOT\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%"
-) > ~/usr/grass/bin/env.bat
-unix2dos ~/usr/grass/bin/env.bat
+) > $BATCH_DIR/env.bat
+unix2dos $BATCH_DIR/env.bat
 
 OSGEO4W_ROOT_ESCAPED=`echo $OSGEO4W_ROOT | sed 's/\\\\/\\\\\\\\/g'`
 MSYS2_ROOT_ESCAPED=`echo $MSYS2_ROOT | sed 's/\\\\/\\\\\\\\/g'`
@@ -31,5 +35,5 @@ sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$OSGEO4W_ROOT_ESCAPED'\\bin\2\nSET HOME='$H
     -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "%HOME%\\usr\\grass\\bin\\env.bat"/' \
     -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1%HOME%\\usr\\grass\\grass\\bin.'$MINGW_CHOST'\\grass'$VERSION'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > ~/usr/grass/bin/grass$VERSION.bat
-unix2dos ~/usr/grass/bin/grass$VERSION.bat
+) > $BATCH_DIR/grass$VERSION.bat
+unix2dos $BATCH_DIR/grass$VERSION.bat

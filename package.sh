@@ -3,8 +3,11 @@
 # can be extracted to C:\OSGeo4W64.
 
 set -e
-OSGEO4W_ROOT='C:\OSGeo4W64'
-OSGEO4W_MSYS_ROOT='/c/OSGeo4W64'
+. ${GRASSBUILDRC-~/.grassbuildrc}
+cd $GRASS_SRC
+
+OSGEO4W_ROOT_MSYS=$OSGEO4W64
+OSGEO4W_ROOT=`echo $OSGEO4W_ROOT_MSYS | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
 OPT_PATH=$OSGEO4W_MSYS_ROOT/opt
 GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`

@@ -1,13 +1,8 @@
 #!/bin/sh
 # This script builds GRASS GIS.
 
-test -e ~/usr/grass/bin || mkdir ~/usr/grass/bin
-
-cat<<'EOT'> ~/usr/grass/bin/python
-#!/bin/sh
-exec python3 "$@"
-EOT
-
-export PATH="$HOME/usr/grass/bin:$PATH"
+set -e
+. ${GRASSBUILDRC-~/.grassbuildrc}
+cd $GRASS_SRC
 
 make "$@" > mymake.log 2>&1

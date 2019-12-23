@@ -17,7 +17,7 @@
 set -e
 
 # default path, but can be overriden from the command line
-GRASS_SOURCE=${GRASS_SOURCE-$HOME/usr/local/src/grass}
+OSGEO4W64=${OSGEO4W64-/c/osgeo4w64}
 
 # process options
 PULL=0
@@ -28,16 +28,16 @@ for opt; do
 		cat<<'EOT'
 Usage: compile.sh [OPTIONS]
 
--h, --help          display this help message
-    --grass-source  GRASS source path (default: $HOME/usr/local/src/grass)
-    --pull          update the current branch
-    --package       package the compiled build as
-                    grass79-x86_64-w64-mingw32-osgeo4w64-YYYYMMDD.zip
+-h, --help       display this help message
+    --osgeo4w64  OSGeo4W64 path (default: /c/osgeo4w64)
+    --pull       update the current branch
+    --package    package the compiled build as
+                 grass79-x86_64-w64-mingw32-osgeo4w64-YYYYMMDD.zip
 EOT
 		exit
 		;;
-	--grass-source=*)
-		GRASS_SOURCE=`echo $opt | sed 's/^[^=]*=//'`
+	--osgeo4w64=*)
+		OSGEO4W64=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--pull)
 		PULL=1
@@ -58,6 +58,13 @@ if [ ! -e grass.pc.in ]; then
 	exit 1
 fi
 
+# check path
+if [ ! -e $OSGEO4W64 ]; then
+	echo "$OSGEO4W64: not found"
+	exit 1
+fi
+OSGEO4W_MSYS_ROOT=$OSGEO4W64
+
 # update the current branch if requested
 if [ $PULL -eq 1 ]; then
 	if [ ! -e .git ]; then
@@ -69,19 +76,20 @@ fi
 
 # compile
 
+GRASS_SOURCE=`pwd`
 tmp=`dirname $0`
 GRASS_MINGW_SCRIPTS=`realpath $tmp`
 
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
-OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
+OSGEO4W_MSYS_ROOT=$OSGEO4W_MSYS_ROOT \
 ./myconfigure \
 --host=$MINGW_CHOST \
 --with-nls \
---with-includes=/c/osgeo4w64/include \
---with-libs='/c/osgeo4w64/lib /c/osgeo4w64/bin' \
+--with-includes=$OSGEO4W_MSYS_ROOT/include \
+--with-libs="$OSGEO4W_MSYS_ROOT/lib $OSGEO4W_MSYS_ROOT/bin" \
 --with-gdal=$GRASS_SOURCE/mswindows/osgeo4w/gdal-config \
 --with-opengl=windows \
---with-freetype-includes=/c/osgeo4w64/include/freetype2 \
+--with-freetype-includes=$OSGEO4W_MSYS_ROOT/include/freetype2 \
 --with-geos=$GRASS_SOURCE/mswindows/osgeo4w/geos-config \
 --with-netcdf=$GRASS_MINGW_SCRIPTS/nc-config \
 --with-liblas=$GRASS_SOURCE/mswindows/osgeo4w/liblas-config \
@@ -92,8 +100,6 @@ make clean default
 
 # package
 
-OSGEO4W_ROOT='C:\OSGeo4W64'
-OSGEO4W_MSYS_ROOT='/c/OSGeo4W64'
 OPT_PATH=$OSGEO4W_MSYS_ROOT/opt
 GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
@@ -127,7 +133,6 @@ EOT
 ) > $GRASS_PATH/etc/env.bat
 unix2dos $GRASS_PATH/etc/env.bat
 
-OSGEO4W_ROOT_ESCAPED=`echo $OSGEO4W_ROOT | sed 's/\\\\/\\\\\\\\/g'`
 (
 sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
     -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \

@@ -1,0 +1,20 @@
+# GRASS build scripts
+# https://github.com/HuidaeCho/grass-mingw-scripts
+GRASS_BUILD_DIR=$HOME/usr/local/src/grass-mingw-scripts
+
+# For packaging
+GRASS_ZIP_DIR=$GRASS_BUILD_DIR
+
+################################################################################
+# OSGeo4W64
+# http://osgeo4w.osgeo.org/
+OSGEO4W64=/c/osgeo4w64
+
+################################################################################
+# For building the GRASS core
+# https://github.com/OSGeo/grass
+GRASS_SRC=$HOME/usr/local/src/grass
+
+################################################################################
+# Batch files
+BATCH_DIR=$HOME/usr/local/bin
