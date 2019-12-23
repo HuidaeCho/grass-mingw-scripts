@@ -69,8 +69,8 @@ fi
 
 # compile
 
-GRASS_MINGW_SCRIPTS=`dirname $0`
-GRASS_MINGW_SCRIPTS=`realpath $0`
+tmp=`dirname $0`
+GRASS_MINGW_SCRIPTS=`realpath $tmp`
 
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
