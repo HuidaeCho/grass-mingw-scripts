@@ -37,7 +37,7 @@ EOT
 		exit
 		;;
 	--grass-source=*)
-		GRASS=`echo $opt | sed 's/^[^=]*=//'`
+		GRASS_SOURCE=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--pull)
 		PULL=1
