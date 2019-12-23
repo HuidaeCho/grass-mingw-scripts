@@ -16,27 +16,34 @@
 # stop on errors
 set -e
 
+# default path, but can be overriden from the command line
+GRASS_SOURCE=${GRASS_SOURCE-$HOME/usr/local/src/grass}
+
 # process options
-pull=0
-package=0
+PULL=0
+PACKAGE=0
 for opt; do
 	case $opt in
 	-h|--help)
 		cat<<'EOT'
 Usage: compile.sh [OPTIONS]
 
--h, --help     display this help message
-    --pull     update the current branch
-    --package  package the compiled build as
-               grass79-x86_64-w64-mingw32-YYYYMMDD.zip
+-h, --help          display this help message
+    --grass-source  GRASS source path (default: $HOME/usr/local/src/grass)
+    --pull          update the current branch
+    --package       package the compiled build as
+                    grass79-x86_64-w64-mingw32-osgeo4w64-YYYYMMDD.zip
 EOT
 		exit
 		;;
+	--grass-source=*)
+		GRASS=`echo $opt | sed 's/^[^=]*=//'`
+		;;
 	--pull)
-		pull=1
+		PULL=1
 		;;
 	--package)
-		package=1
+		PACKAGE=1
 		;;
 	*)
 		echo "$opt: unknown option"
@@ -52,7 +59,7 @@ if [ ! -e grass.pc.in ]; then
 fi
 
 # update the current branch if requested
-if [ $pull -eq 1 ]; then
+if [ $PULL -eq 1 ]; then
 	if [ ! -e .git ]; then
 		echo "not a git repository"
 		exit 1
@@ -69,12 +76,12 @@ OSGEO4W_ROOT_MSYS=/c/osgeo4w64 \
 --with-nls \
 --with-includes=/c/osgeo4w64/include \
 --with-libs='/c/osgeo4w64/lib /c/osgeo4w64/bin' \
---with-gdal=$HOME/usr/local/src/grass/mswindows/osgeo4w/gdal-config \
+--with-gdal=$GRASS_SOURCE/mswindows/osgeo4w/gdal-config \
 --with-opengl=windows \
 --with-freetype-includes=/c/osgeo4w64/include/freetype2 \
---with-geos=$HOME/usr/local/src/grass/mswindows/osgeo4w/geos-config \
---with-netcdf=$HOME/usr/local/src/grass-mingw-scripts/nc-config \
---with-liblas=$HOME/usr/local/src/grass/mswindows/osgeo4w/liblas-config \
+--with-geos=$GRASS_SOURCE/mswindows/osgeo4w/geos-config \
+--with-netcdf=`dirname $0`/nc-config \
+--with-liblas=$GRASS_SOURCE/mswindows/osgeo4w/liblas-config \
 --with-bzlib \
 >> /dev/stdout
 
@@ -89,7 +96,7 @@ GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 ARCH=x86_64-w64-mingw32
 DATE=`date +%Y%m%d`
-GRASS_ZIP=$HOME/usr/local/src/grass/grass$VERSION-$ARCH-osgeo4w64-$DATE.zip
+GRASS_ZIP=$GRASS_SOURCE/grass$VERSION-$ARCH-osgeo4w64-$DATE.zip
 
 test -e $GRASS_PATH && rm -rf $GRASS_PATH
 test -e $OPT_PATH || mkdir -p $OPT_PATH
@@ -127,7 +134,7 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
 unix2dos $GRASS_PATH/grass$VERSION.bat
 
 # package if requested
-if [ $package -eq 1 ]; then
+if [ $PACKAGE -eq 1 ]; then
 	rm -f grass*-$ARCH-osgeo4w64-*.zip
 	cd $OSGEO4W_MSYS_ROOT/..
 	OSGEO4W_BASENAME=`basename $OSGEO4W_MSYS_ROOT`
