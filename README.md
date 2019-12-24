@@ -76,7 +76,7 @@ If you want to build the latest hcho branch of my personal repository that inclu
 
 ### Scheduling daily builds
 
-You can schedule daily builds and, optionally, copy the latest package to deployment directories.
+You can schedule daily builds and, optionally, copy the latest package to deployment directories (``U:\Shared\Software`` in this example).
 
 1. Press the Windows key, type and run `Task Scheduler`.
 2. Click `Create Basic Task...`.
