@@ -10,7 +10,7 @@
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
 # cd grass
-# compile.sh --pull --package > compile.log 2>&1
+# compile.sh --osgeo4w=/d/osgeo4w64 --pull --package > compile.log 2>&1
 #
 
 # stop on errors

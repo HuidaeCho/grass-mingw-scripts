@@ -1,6 +1,9 @@
 #!/bin/sh
 # This script creates batch files for starting up GRASS GIS from the source
 # directory.
+#
+# To override the default OSGEO4W (/c/osgeo4w64),
+#	OSGEO4W=/d/osgeo4w64 mkbats.sh
 
 set -e
 OSGEO4W_ROOT_MSYS=${OSGEO4W-/c/osgeo4w64}
