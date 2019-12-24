@@ -63,7 +63,7 @@ for dir; do
 		dir=`echo $dir | sed 's/^-//'`
 		;;
 	esac
-	test -e $dir || mkdir -p $dir
+	test -d $dir || mkdir -p $dir
 	if [ $delete -eq 1 ]; then
 		rm -f $dir/grass*-$ARCH-osgeo4w$BIT-*.zip
 	fi

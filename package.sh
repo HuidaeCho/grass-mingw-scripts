@@ -9,7 +9,7 @@ set -e
 OSGEO4W_ROOT_MSYS=${OSGEO4W-/c/osgeo4w64}
 
 # see if we're inside the root of the GRASS source code
-if [ ! -e grass.pc.in ]; then
+if [ ! -f grass.pc.in ]; then
 	echo "Please run this script from the root of the GRASS source code"
 	exit 1
 fi
@@ -36,8 +36,8 @@ VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make
 DATE=`date +%Y%m%d`
 
 # copy MinGW libraries
-test -e $GRASS_PATH && rm -rf $GRASS_PATH
-test -e $OPT_PATH || mkdir -p $OPT_PATH
+test -d $GRASS_PATH && rm -rf $GRASS_PATH
+test -d $OPT_PATH || mkdir -p $OPT_PATH
 cp -a dist.$ARCH $GRASS_PATH
 rm -f $GRASS_PATH/grass$VERSION.tmp $GRASS_PATH/etc/fontcap
 cp -a bin.$ARCH/grass$VERSION.py $GRASS_PATH/etc

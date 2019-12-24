@@ -54,13 +54,13 @@ EOT
 done
 
 # see if we're inside the root of the GRASS source code
-if [ ! -e grass.pc.in ]; then
+if [ ! -f grass.pc.in ]; then
 	echo "Please run this script from the root of the GRASS source code"
 	exit 1
 fi
 
 # check path
-if [ ! -e $OSGEO4W ]; then
+if [ ! -d $OSGEO4W ]; then
 	echo "$OSGEO4W: not found"
 	exit 1
 fi
@@ -81,12 +81,17 @@ i686)
 	exit 1
 esac
 
+if [ $UPDATE -eq 1 -a ! -d .git ]; then
+	echo "not a git repository"
+	exit 1
+fi
+
+# start
+echo "Started compilation: `date`"
+echo
+
 # update the current branch if requested
-if [ $UPDATE -eq 1 ]; then
-	if [ ! -e .git ]; then
-		echo "not a git repository"
-		exit 1
-	fi
+if [ $UPDATE -eq 1 -a -d .git ]; then
 	git pull
 fi
 
@@ -124,8 +129,8 @@ VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make
 DATE=`date +%Y%m%d`
 GRASS_ZIP=$GRASS_SRC/grass$VERSION-$ARCH-osgeo4w$BIT-$DATE.zip
 
-test -e $GRASS_PATH && rm -rf $GRASS_PATH
-test -e $OPT_PATH || mkdir -p $OPT_PATH
+test -d $GRASS_PATH && rm -rf $GRASS_PATH
+test -d $OPT_PATH || mkdir -p $OPT_PATH
 cp -a dist.$ARCH $GRASS_PATH
 rm -f $GRASS_PATH/grass$VERSION.tmp $GRASS_PATH/etc/fontcap
 cp -a bin.$ARCH/grass$VERSION.py $GRASS_PATH/etc
@@ -166,3 +171,6 @@ if [ $PACKAGE -eq 1 ]; then
 	OSGEO4W_BASENAME=`basename $OSGEO4W_ROOT_MSYS`
 	zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"
 fi
+
+echo
+echo "Completed compilation: `date`"
