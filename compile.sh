@@ -23,7 +23,7 @@ OSGEO4W=${OSGEO4W-/c/osgeo4w64}
 PULL=0
 PACKAGE=0
 for opt; do
-	case $opt in
+	case "$opt" in
 	-h|--help)
 		cat<<'EOT'
 Usage: compile.sh [OPTIONS]
@@ -66,7 +66,7 @@ fi
 OSGEO4W_ROOT_MSYS=$OSGEO4W
 
 # check architecture
-case $MSYSTEM_CARCH in
+case "$MSYSTEM_CARCH" in
 x86_64)
 	ARCH=x86_64-w64-mingw32
 	BIT=64

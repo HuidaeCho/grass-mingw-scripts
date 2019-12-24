@@ -19,7 +19,7 @@ if [ ! -e grass.pc.in ]; then
 fi
 
 # check architecture
-case $MSYSTEM_CARCH in
+case "$MSYSTEM_CARCH" in
 x86_64)
 	ARCH=x86_64-w64-mingw32
 	BIT=64
@@ -45,7 +45,7 @@ merge.sh
 myconfigure.sh
 mymake.sh clean default
 
-case $1 in
+case "$1" in
 -p|--package)
 	package.sh
 	;;

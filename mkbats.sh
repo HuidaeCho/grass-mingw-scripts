@@ -15,7 +15,7 @@ if [ ! -e grass.pc.in ]; then
 fi
 
 # check architecture
-case $MSYSTEM_CARCH in
+case "$MSYSTEM_CARCH" in
 x86_64)
 	ARCH=x86_64-w64-mingw32
 	;;
