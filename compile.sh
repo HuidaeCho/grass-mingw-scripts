@@ -39,7 +39,7 @@ Usage: compile.sh [OPTIONS]
 EOT
 		exit
 		;;
-	--grass-sourcew=*)
+	--grass-source=*)
 		GRASS_SRC=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--osgeo4w=*)
