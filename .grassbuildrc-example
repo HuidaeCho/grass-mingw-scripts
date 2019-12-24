@@ -1,3 +1,7 @@
+# System bit: 64 or 32
+SYSTEM_BIT=64
+
+################################################################################
 # GRASS build scripts
 # https://github.com/HuidaeCho/grass-mingw-scripts
 GRASS_BUILD_DIR=$HOME/usr/local/src/grass-mingw-scripts
@@ -14,10 +18,3 @@ OSGEO4W=/c/osgeo4w64
 # For building the GRASS core
 # https://github.com/OSGeo/grass
 GRASS_SRC=$HOME/usr/local/src/grass
-
-# System bit: 64 or 32
-SYSTEM_BIT=64
-
-################################################################################
-# Batch files
-BATCH_DIR=$HOME/usr/local/bin
