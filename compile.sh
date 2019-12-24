@@ -63,7 +63,7 @@ if [ ! -e $OSGEO4W64 ]; then
 	echo "$OSGEO4W64: not found"
 	exit 1
 fi
-OSGEO4W_MSYS_ROOT=$OSGEO4W64
+OSGEO4W_ROOT_MSYS=$OSGEO4W64
 
 # update the current branch if requested
 if [ $PULL -eq 1 ]; then
@@ -81,15 +81,15 @@ tmp=`dirname $0`
 GRASS_MINGW_SCRIPTS=`realpath $tmp`
 
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
-OSGEO4W_MSYS_ROOT=$OSGEO4W_MSYS_ROOT \
+OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \
 ./myconfigure \
 --host=$MINGW_CHOST \
 --with-nls \
---with-includes=$OSGEO4W_MSYS_ROOT/include \
---with-libs="$OSGEO4W_MSYS_ROOT/lib $OSGEO4W_MSYS_ROOT/bin" \
+--with-includes=$OSGEO4W_ROOT_MSYS/include \
+--with-libs="$OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/bin" \
 --with-gdal=$GRASS_SOURCE/mswindows/osgeo4w/gdal-config \
 --with-opengl=windows \
---with-freetype-includes=$OSGEO4W_MSYS_ROOT/include/freetype2 \
+--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
 --with-geos=$GRASS_SOURCE/mswindows/osgeo4w/geos-config \
 --with-netcdf=$GRASS_MINGW_SCRIPTS/nc-config \
 --with-liblas=$GRASS_SOURCE/mswindows/osgeo4w/liblas-config \
@@ -100,7 +100,7 @@ make clean default
 
 # package
 
-OPT_PATH=$OSGEO4W_MSYS_ROOT/opt
+OPT_PATH=$OSGEO4W_ROOT_MSYS/opt
 GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 ARCH=x86_64-w64-mingw32
@@ -144,7 +144,7 @@ unix2dos $GRASS_PATH/grass$VERSION.bat
 # package if requested
 if [ $PACKAGE -eq 1 ]; then
 	rm -f grass*-$ARCH-osgeo4w64-*.zip
-	cd $OSGEO4W_MSYS_ROOT/..
-	OSGEO4W_BASENAME=`basename $OSGEO4W_MSYS_ROOT`
+	cd $OSGEO4W_ROOT_MSYS/..
+	OSGEO4W_BASENAME=`basename $OSGEO4W_ROOT_MSYS`
 	zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"
 fi

@@ -8,7 +8,7 @@ cd $GRASS_SRC
 
 OSGEO4W_ROOT_MSYS=$OSGEO4W64
 OSGEO4W_ROOT=`echo $OSGEO4W_ROOT_MSYS | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
-OPT_PATH=$OSGEO4W_MSYS_ROOT/opt
+OPT_PATH=$OSGEO4W_ROOT_MSYS/opt
 GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 ARCH=x86_64-w64-mingw32
@@ -50,7 +50,7 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
 ) > $GRASS_PATH/grass$VERSION.bat
 unix2dos $GRASS_PATH/grass$VERSION.bat
 
-cd $OSGEO4W_MSYS_ROOT/..
-OSGEO4W_BASENAME=`basename $OSGEO4W_MSYS_ROOT`
+cd $OSGEO4W_ROOT_MSYS/..
+OSGEO4W_BASENAME=`basename $OSGEO4W_ROOT_MSYS`
 rm -f ~/usr/grass/grass*-$ARCH-osgeo4w64-*.zip
 zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"
