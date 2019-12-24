@@ -58,6 +58,8 @@ EOT
 	esac
 done
 
+tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
+
 cd $GRASS_SRC
 
 # see if we're inside the root of the GRASS source code
@@ -98,8 +100,6 @@ if [ $PULL -eq 1 ]; then
 fi
 
 # compile
-
-tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
 
 export MINGW_CHOST=$ARCH
 export PATH="/mingw$BIT/bin:$PATH"
