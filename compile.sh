@@ -94,9 +94,9 @@ fi
 
 # compile
 
-GRASS_SOURCE=`pwd`
+GRASS_SRC=`pwd`
 tmp=`dirname $0`
-GRASS_MINGW_SCRIPTS=`realpath $tmp`
+GRASS_BUILD_SCRIPTS=`realpath $tmp`
 
 export MINGW_CHOST=$ARCH
 export PATH="/mingw$SYSTEM_BIT/bin:$PATH"
@@ -108,12 +108,12 @@ OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \
 --with-nls \
 --with-includes=$OSGEO4W_ROOT_MSYS/include \
 --with-libs="$OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/bin" \
---with-gdal=$GRASS_SOURCE/mswindows/osgeo4w/gdal-config \
+--with-gdal=$GRASS_SRC/mswindows/osgeo4w/gdal-config \
 --with-opengl=windows \
 --with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
---with-geos=$GRASS_SOURCE/mswindows/osgeo4w/geos-config \
---with-netcdf=$GRASS_MINGW_SCRIPTS/nc-config \
---with-liblas=$GRASS_SOURCE/mswindows/osgeo4w/liblas-config \
+--with-geos=$GRASS_SRC/mswindows/osgeo4w/geos-config \
+--with-netcdf=$GRASS_BUILD_SCRIPTS/nc-config \
+--with-liblas=$GRASS_SRC/mswindows/osgeo4w/liblas-config \
 --with-bzlib \
 >> /dev/stdout
 
@@ -125,7 +125,7 @@ OPT_PATH=$OSGEO4W_ROOT_MSYS/opt
 GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 DATE=`date +%Y%m%d`
-GRASS_ZIP=$GRASS_SOURCE/grass$VERSION-$ARCH-osgeo4w$SYSTEM_BIT-$DATE.zip
+GRASS_ZIP=$GRASS_SRC/grass$VERSION-$ARCH-osgeo4w$SYSTEM_BIT-$DATE.zip
 
 test -e $GRASS_PATH && rm -rf $GRASS_PATH
 test -e $OPT_PATH || mkdir -p $OPT_PATH
