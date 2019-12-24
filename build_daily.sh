@@ -5,16 +5,16 @@
 # cmd.exe /c c:\msys64\usr\bin\bash -l
 #	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
 #
-# To build the latest and copy it to U:\Shared\Software and P:\Software
+# To build the latest and copy it to P:\Archive and U:\Shared\Software
 # cmd.exe /c c:\msys64\usr\bin\bash -l
 #	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
-#	/u/shared/software /p/software
+#	/p/archive /u/shared/software
 #
-# To build the latest and copy it to U:\Shared\Software and P:\Software, but
-# delete any previous packages from P:\Software
+# To build the latest and copy it to P:\Archive and U:\Shared\Software, but
+# delete any previous packages from U:\Shared\Software leaving the latest only
 # cmd.exe /c c:\msys64\usr\bin\bash -l
 #	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
-#	/u/shared/software -/p/software
+#	/p/archive -/u/shared/software
 
 set -e
 
@@ -30,12 +30,11 @@ if [ ! -d $GRASS_SRC ]; then
 fi
 
 shift
-DEPLOY_PATHS="$@"
 
 cd $GRASS_SRC
 (
 tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
-$GRASS_BUILD_SCRIPTS/grass-mingw-scripts/compile.sh --update --package
+$GRASS_BUILD_SCRIPTS/compile.sh --update --package
 
 # check architecture
 case "$MSYSTEM_CARCH" in
