@@ -2,11 +2,11 @@
 # This script packages already built GRASS GIS as a standalone ZIP file that
 # can be extracted to C:\.
 #
-# To override the default OSGEO4W (/c/osgeo4w64),
-#	OSGEO4W=/d/osgeo4w64 package.sh
+# To override the default OSGEO4W (/c/OSGeo4W64),
+#	OSGEO4W=/d/OSGeo4W64 package.sh
 
 set -e
-OSGEO4W_ROOT_MSYS=${OSGEO4W-/c/osgeo4w64}
+OSGEO4W_ROOT_MSYS=${OSGEO4W-/c/OSGeo4W64}
 
 # see if we're inside the root of the GRASS source code
 if [ ! -f grass.pc.in ]; then

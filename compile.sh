@@ -10,7 +10,7 @@
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
 # cd grass
-# compile.sh --grass-source=/usr/local/src/grass --osgeo4w=/d/osgeo4w64 \
+# compile.sh --grass-source=/usr/local/src/grass --osgeo4w=/d/OSGeo4W64 \
 #	--update --package > compile.log 2>&1
 #
 
@@ -18,7 +18,7 @@
 set -e
 
 # default paths, but can be overriden from the command line
-OSGEO4W=${OSGEO4W-/c/osgeo4w64}
+OSGEO4W=${OSGEO4W-/c/OSGeo4W64}
 
 # process options
 UPDATE=0
@@ -30,7 +30,7 @@ for opt; do
 Usage: compile.sh [OPTIONS]
 
 -h, --help          display this help message
-    --osgeo4w=PATH  OSGeo4W path (default: /c/osgeo4w64)
+    --osgeo4w=PATH  OSGeo4W path (default: /c/OSGeo4W64)
     --update        update the current branch
     --package       package the compiled build as
                     grass79-${ARCH}-osgeo4w${BIT}-YYYYMMDD.zip
