@@ -1,8 +1,25 @@
 #!/bin/sh
+# This script is meant to be run by Task Scheduler.
+#
+# To build the latest
+# cmd.exe /c c:\msys64\usr\bin\bash -l
+#	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
+#
+# To build the latest and copy it to U:\Shared\Software and P:\Software
+# cmd.exe /c c:\msys64\usr\bin\bash -l
+#	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
+#	/u/shared/software /p/software
+#
+# To build the latest and copy it to U:\Shared\Software and P:\Software, but
+# delete any previous packages from P:\Software
+# cmd.exe /c c:\msys64\usr\bin\bash -l
+#	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
+#	/u/shared/software -/p/software
+
 set -e
 
-if [ $# -lt 2 ]; then
-	echo "Usage: build_daily.sh /path/to/grass/source /deploy/path1 /deploy/paty2 ..."
+if [ $# -lt 1 ]; then
+	echo "Usage: build_daily.sh /path/to/grass/source [/deploy/path1 /deploy/paty2 ...]"
 	exit 1
 fi
 
@@ -40,8 +57,17 @@ DATE=`date +%Y%m%d`
 GRASS_ZIP=grass$VERSION-$ARCH-osgeo4w$BIT-$DATE.zip
 
 for dir in "$@"; do
+	delete=0
+	case "$dir" in
+	-*)
+		delete=1
+		dir=`echo $dir | sed 's/^-//'`
+		;;
+	esac
 	test -e $dir || mkdir -p $dir
-	rm -f $dir/grass*-$ARCH-osgeo4w$BIT-*.zip
+	if [ $delete -eq 1 ]; then
+		rm -f $dir/grass*-$ARCH-osgeo4w$BIT-*.zip
+	fi
 	cp -a $GRASS_ZIP $dir
 done
 ) > build_daily.log 2>&1
