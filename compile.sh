@@ -80,6 +80,9 @@ GRASS_SOURCE=`pwd`
 tmp=`dirname $0`
 GRASS_MINGW_SCRIPTS=`realpath $tmp`
 
+export MINGW_CHOST=x86_64-w64-mingw32
+export PATH="/mingw64/bin:$PATH"
+
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \
 ./myconfigure \
