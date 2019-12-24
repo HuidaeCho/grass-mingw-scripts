@@ -33,8 +33,7 @@ i686)
 	exit 1
 esac
 
-tmp=`dirname $0`
-GRASS_BUILD_SCRIPTS=`realpath $tmp`
+tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
 
 export MINGW_CHOST=$ARCH
 export PATH="$GRASS_BUILD_SCRIPTS:/mingw$BIT/bin:$PATH"

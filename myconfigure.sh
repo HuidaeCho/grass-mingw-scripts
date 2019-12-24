@@ -15,8 +15,7 @@ if [ ! -e grass.pc.in ]; then
 fi
 
 GRASS_SRC=`pwd`
-tmp=`dirname $0`
-GRASS_BUILD_SCRIPTS=`realpath $tmp`
+tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
 
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \

@@ -10,13 +10,15 @@
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
 # cd grass
-# compile.sh --osgeo4w=/d/osgeo4w64 --pull --package > compile.log 2>&1
+# compile.sh --grass-source=/usr/local/src/grass --osgeo4w=/d/osgeo4w64 \
+#	--pull --package > compile.log 2>&1
 #
 
 # stop on errors
 set -e
 
-# default path, but can be overriden from the command line
+# default paths, but can be overriden from the command line
+GRASS_SRC=${GRASS_SOURCE-`pwd`}
 OSGEO4W=${OSGEO4W-/c/osgeo4w64}
 
 # process options
@@ -28,13 +30,17 @@ for opt; do
 		cat<<'EOT'
 Usage: compile.sh [OPTIONS]
 
--h, --help     display this help message
-    --osgeo4w  OSGeo4W path (default: /c/osgeo4w64)
-    --pull     update the current branch
-    --package  package the compiled build as
-               grass79-${ARCH}-osgeo4w${BIT}-YYYYMMDD.zip
+-h, --help               display this help message
+    --grass-source=PATH  GRASS source path (default: current directory)
+    --osgeo4w=PATH       OSGeo4W path (default: /c/osgeo4w64)
+    --pull               update the current branch
+    --package            package the compiled build as
+                         grass79-${ARCH}-osgeo4w${BIT}-YYYYMMDD.zip
 EOT
 		exit
+		;;
+	--grass-sourcew=*)
+		GRASS_SRC=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--osgeo4w=*)
 		OSGEO4W=`echo $opt | sed 's/^[^=]*=//'`
@@ -51,6 +57,8 @@ EOT
 		;;
 	esac
 done
+
+cd $GRASS_SRC
 
 # see if we're inside the root of the GRASS source code
 if [ ! -e grass.pc.in ]; then
@@ -91,9 +99,7 @@ fi
 
 # compile
 
-GRASS_SRC=`pwd`
-tmp=`dirname $0`
-GRASS_BUILD_SCRIPTS=`realpath $tmp`
+tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
 
 export MINGW_CHOST=$ARCH
 export PATH="/mingw$BIT/bin:$PATH"
