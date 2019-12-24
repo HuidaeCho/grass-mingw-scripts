@@ -24,7 +24,7 @@ OPT_PATH=$OSGEO4W_ROOT_MSYS/opt
 GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 DATE=`date +%Y%m%d`
-GRASS_ZIP=~/usr/grass/grass$VERSION-$ARCH-osgeo4w$SYSTEM_BIT-$DATE.zip
+GRASS_ZIP=$GRASS_ZIP_DIR/grass$VERSION-$ARCH-osgeo4w$SYSTEM_BIT-$DATE.zip
 
 test -e $GRASS_PATH && rm -rf $GRASS_PATH
 test -e $OPT_PATH || mkdir -p $OPT_PATH
@@ -64,5 +64,5 @@ unix2dos $GRASS_PATH/grass$VERSION.bat
 
 cd $OSGEO4W_ROOT_MSYS/..
 OSGEO4W_BASENAME=`basename $OSGEO4W_ROOT_MSYS`
-rm -f ~/usr/grass/grass*-$ARCH-osgeo4w$SYSTEM_BIT-*.zip
+rm -f $GRASS_ZIP_DIR/grass*-$ARCH-osgeo4w$SYSTEM_BIT-*.zip
 zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"
