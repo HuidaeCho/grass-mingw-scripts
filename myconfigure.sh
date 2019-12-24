@@ -3,10 +3,17 @@
 # building GRASS GIS.
 
 set -e
-. ${GRASSBUILDRC-~/.grassbuildrc}
-cd $GRASS_SRC
+OSGEO4W_ROOT_MSYS=${OSGEO4W-/c/osgeo4w64}
 
-OSGEO4W_ROOT_MSYS=$OSGEO4W
+# see if we're inside the root of the GRASS source code
+if [ ! -e grass.pc.in ]; then
+	echo "Please run this script from the root of the GRASS source code"
+	exit 1
+fi
+
+GRASS_SRC=`pwd`
+tmp=`dirname $0`
+GRASS_BUILD_SCRIPTS=`realpath $tmp`
 
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \

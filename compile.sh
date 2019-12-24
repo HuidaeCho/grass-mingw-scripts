@@ -18,7 +18,6 @@ set -e
 
 # default path, but can be overriden from the command line
 OSGEO4W=${OSGEO4W-/c/osgeo4w64}
-SYSTEM_BIT=${SYSTEM_BIT-64}
 
 # process options
 PULL=0
@@ -31,18 +30,14 @@ Usage: compile.sh [OPTIONS]
 
 -h, --help     display this help message
     --osgeo4w  OSGeo4W path (default: /c/osgeo4w64)
-    --32       build 32-bit binaries (default: 64-bit)
     --pull     update the current branch
     --package  package the compiled build as
-               grass79-${ARCH}-osgeo4w${SYSTEM_BIT}-YYYYMMDD.zip
+               grass79-${ARCH}-osgeo4w${BIT}-YYYYMMDD.zip
 EOT
 		exit
 		;;
 	--osgeo4w=*)
 		OSGEO4W=`echo $opt | sed 's/^[^=]*=//'`
-		;;
-	--32)
-		SYSTEM_BIT=32
 		;;
 	--pull)
 		PULL=1
@@ -70,16 +65,18 @@ if [ ! -e $OSGEO4W ]; then
 fi
 OSGEO4W_ROOT_MSYS=$OSGEO4W
 
-# check architecture bit
-case $SYSTEM_BIT in
-64)
+# check architecture
+case $MSYSTEM_CARCH in
+x86_64)
 	ARCH=x86_64-w64-mingw32
+	BIT=64
 	;;
-32)
+i686)
 	ARCH=i686-w64-mingw32
+	BIT=32
 	;;
 *)
-	echo "$SYSTEM_BIT: unknown system bit"
+	echo "$MSYSTEM_CARCH: unsupported architecture"
 	exit 1
 esac
 
@@ -99,7 +96,7 @@ tmp=`dirname $0`
 GRASS_BUILD_SCRIPTS=`realpath $tmp`
 
 export MINGW_CHOST=$ARCH
-export PATH="/mingw$SYSTEM_BIT/bin:$PATH"
+export PATH="/mingw$BIT/bin:$PATH"
 
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \
@@ -125,14 +122,14 @@ OPT_PATH=$OSGEO4W_ROOT_MSYS/opt
 GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 DATE=`date +%Y%m%d`
-GRASS_ZIP=$GRASS_SRC/grass$VERSION-$ARCH-osgeo4w$SYSTEM_BIT-$DATE.zip
+GRASS_ZIP=$GRASS_SRC/grass$VERSION-$ARCH-osgeo4w$BIT-$DATE.zip
 
 test -e $GRASS_PATH && rm -rf $GRASS_PATH
 test -e $OPT_PATH || mkdir -p $OPT_PATH
 cp -a dist.$ARCH $GRASS_PATH
 rm -f $GRASS_PATH/grass$VERSION.tmp $GRASS_PATH/etc/fontcap
 cp -a bin.$ARCH/grass$VERSION.py $GRASS_PATH/etc
-cp -a `ldd dist.$ARCH/lib/*.dll | awk '/mingw'$SYSTEM_BIT'/{print $3}' |
+cp -a `ldd dist.$ARCH/lib/*.dll | awk '/mingw'$BIT'/{print $3}' |
 	sort -u | grep -v 'lib\(crypto\|ssl\)'` $GRASS_PATH/lib
 
 (
@@ -164,7 +161,7 @@ unix2dos $GRASS_PATH/grass$VERSION.bat
 
 # package if requested
 if [ $PACKAGE -eq 1 ]; then
-	rm -f grass*-$ARCH-osgeo4w$SYSTEM_BIT-*.zip
+	rm -f grass*-$ARCH-osgeo4w$BIT-*.zip
 	cd $OSGEO4W_ROOT_MSYS/..
 	OSGEO4W_BASENAME=`basename $OSGEO4W_ROOT_MSYS`
 	zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"

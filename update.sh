@@ -8,24 +8,35 @@
 #	update.sh --package # update and package the build
 
 set -e
-. ${GRASSBUILDRC-~/.grassbuildrc}
-cd $GRASS_SRC
 
-case $SYSTEM_BIT in
-64)
+# see if we're inside the root of the GRASS source code
+if [ ! -e grass.pc.in ]; then
+	echo "Please run this script from the root of the GRASS source code"
+	exit 1
+fi
+
+# check architecture
+case $MSYSTEM_CARCH in
+x86_64)
 	ARCH=x86_64-w64-mingw32
+	BIT=64
 	;;
-32)
+i686)
 	ARCH=i686-w64-mingw32
+	BIT=32
 	;;
 *)
-	echo "$SYSTEM_BIT: unknown system bit"
+	echo "$MSYSTEM_CARCH: unsupported architecture"
 	exit 1
 esac
 
-export MINGW_CHOST=$ARCH
-export PATH="$GRASS_BUILD_DIR:/mingw$SYSTEM_BIT/bin:$PATH"
+tmp=`dirname $0`
+GRASS_BUILD_SCRIPTS=`realpath $tmp`
 
+export MINGW_CHOST=$ARCH
+export PATH="$GRASS_BUILD_SCRIPTS:/mingw$BIT/bin:$PATH"
+
+# build
 (
 merge.sh
 myconfigure.sh
@@ -39,4 +50,4 @@ case $1 in
 	mkbats.sh
 	;;
 esac
-) > build_latest.log 2>&1
+) > update.log 2>&1
