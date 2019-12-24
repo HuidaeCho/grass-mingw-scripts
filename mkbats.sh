@@ -6,7 +6,7 @@ set -e
 . ${GRASSBUILDRC-~/.grassbuildrc}
 cd $GRASS_SRC
 
-OSGEO4W_ROOT_MSYS=$OSGEO4W64
+OSGEO4W_ROOT_MSYS=$OSGEO4W
 OSGEO4W_ROOT=`echo $OSGEO4W_ROOT_MSYS | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
 MSYS2_ROOT=`echo $WD | sed 's#\\\\usr.*##'`
 MINGW_ROOT=`echo "$MSYS2_ROOT$MINGW_PREFIX" | sed 's#/#\\\\#g'`

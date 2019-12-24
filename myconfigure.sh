@@ -6,7 +6,7 @@ set -e
 . ${GRASSBUILDRC-~/.grassbuildrc}
 cd $GRASS_SRC
 
-OSGEO4W_ROOT_MSYS=$OSGEO4W64
+OSGEO4W_ROOT_MSYS=$OSGEO4W
 GRASS_SOURCE=`pwd`
 tmp=`dirname $0`
 GRASS_MINGW_SCRIPTS=`realpath $tmp`

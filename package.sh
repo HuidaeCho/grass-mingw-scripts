@@ -1,26 +1,38 @@
 #!/bin/sh
 # This script packages already built GRASS GIS as a standalone ZIP file that
-# can be extracted to C:\OSGeo4W64.
+# can be extracted to C:\.
 
 set -e
 . ${GRASSBUILDRC-~/.grassbuildrc}
 cd $GRASS_SRC
 
-OSGEO4W_ROOT_MSYS=$OSGEO4W64
+case $SYSTEM_BIT in
+64)
+	ARCH=x86_64-w64-mingw32
+	;;
+32)
+	ARCH=i686-w64-mingw32
+	;;
+*)
+	echo "$SYSTEM_BIT: unknown system bit"
+	exit 1
+esac
+
+OSGEO4W_ROOT_MSYS=$OSGEO4W
 OSGEO4W_ROOT=`echo $OSGEO4W_ROOT_MSYS | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
 OPT_PATH=$OSGEO4W_ROOT_MSYS/opt
 GRASS_PATH=$OPT_PATH/grass
 VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
-ARCH=x86_64-w64-mingw32
 DATE=`date +%Y%m%d`
-GRASS_ZIP=~/usr/grass/grass$VERSION-$ARCH-osgeo4w64-$DATE.zip
+GRASS_ZIP=~/usr/grass/grass$VERSION-$ARCH-osgeo4w$SYSTEM_BIT-$DATE.zip
 
 test -e $GRASS_PATH && rm -rf $GRASS_PATH
 test -e $OPT_PATH || mkdir -p $OPT_PATH
 cp -a dist.$ARCH $GRASS_PATH
 rm -f $GRASS_PATH/grass$VERSION.tmp $GRASS_PATH/etc/fontcap
 cp -a bin.$ARCH/grass$VERSION.py $GRASS_PATH/etc
-cp -a `ldd dist.$ARCH/lib/*.dll | awk '/mingw64/{print $3}' | sort -u | grep -v 'lib\(crypto\|ssl\)'` $GRASS_PATH/lib
+cp -a `ldd dist.$ARCH/lib/*.dll | awk '/mingw'$SYSTEM_BIT'/{print $3}' |
+	sort -u | grep -v 'lib\(crypto\|ssl\)'` $GRASS_PATH/lib
 
 (
 sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
@@ -52,5 +64,5 @@ unix2dos $GRASS_PATH/grass$VERSION.bat
 
 cd $OSGEO4W_ROOT_MSYS/..
 OSGEO4W_BASENAME=`basename $OSGEO4W_ROOT_MSYS`
-rm -f ~/usr/grass/grass*-$ARCH-osgeo4w64-*.zip
+rm -f ~/usr/grass/grass*-$ARCH-osgeo4w$SYSTEM_BIT-*.zip
 zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"
