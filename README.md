@@ -68,7 +68,7 @@ cd ~/usr/local/src/grass
 ../grass-mingw-scripts/compile.sh --pull --package
 ```
 
-The `build_latest_master.sh` will build the latest master branch of the official GRASS GIS repository in `~/usr/grass/grass/dist.x86_64-w64-mingw32` and package it as `~/usr/grass/grass79.zip`, which you can simply extract to `C:\OSGeo4W64` on other computers without administrative rights.
+The `compile.sh` script will build the latest master branch of the official GRASS GIS repository in `~/usr/local/src/grass/dist.x86_64-w64-mingw32` and package it as `~/usr/local/src/grass/grass79-x86_64-w64-mingw32-osgeo4w64-YYYYMMDD.zip`, which you can simply extract to any drive on other computers without administrative rights.
 
 ### Building the latest hcho branch
 
