@@ -72,7 +72,7 @@ The `compile.sh` script will build the latest master branch of the official GRAS
 
 ### Building the latest hcho branch
 
-If you want to build the latest hcho branch of my personal repository that includes all my personal changes that may not have been merged into the official repository yet, change `https://github.com/OSGeo/grass.git` to `https://github.com/HuidaeCho/grass.git` in step 5.
+If you want to build the latest hcho branch of my personal repository that includes all my personal changes that may not have been merged into the official repository yet, change `https://github.com/OSGeo/grass.git` to `https://github.com/HuidaeCho/grass.git`.
 
 ### Scheduling daily builds
 
