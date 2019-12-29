@@ -24,7 +24,7 @@ OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \
 --with-nls \
 --with-includes=$OSGEO4W_ROOT_MSYS/include \
 --with-libs="$OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/bin" \
---with-gdal=$GRASS_SRE/mswindows/osgeo4w/gdal-config \
+--with-gdal=$GRASS_SRC/mswindows/osgeo4w/gdal-config \
 --with-opengl=windows \
 --with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
 --with-geos=$GRASS_SRC/mswindows/osgeo4w/geos-config \
