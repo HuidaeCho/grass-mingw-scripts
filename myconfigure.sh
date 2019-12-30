@@ -21,14 +21,14 @@ sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \
 ./myconfigure \
 --host=$MINGW_CHOST \
---with-nls \
 --with-includes=$OSGEO4W_ROOT_MSYS/include \
 --with-libs="$OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/bin" \
---with-gdal=$GRASS_SRC/mswindows/osgeo4w/gdal-config \
---with-opengl=windows \
+--with-nls \
 --with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
+--with-bzlib \
 --with-geos=$GRASS_SRC/mswindows/osgeo4w/geos-config \
 --with-netcdf=$GRASS_BUILD_SCRIPTS/nc-config \
+--with-gdal=$GRASS_SRC/mswindows/osgeo4w/gdal-config \
 --with-liblas=$GRASS_SRC/mswindows/osgeo4w/liblas-config \
---with-bzlib \
+--with-opengl=windows \
 > myconfigure.log 2>&1
