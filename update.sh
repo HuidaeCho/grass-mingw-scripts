@@ -7,8 +7,8 @@
 #	update.sh           # update the build
 #	update.sh --package # update and package the build
 #
-# To override the default OSGEO4W (/c/OSGeo4W64),
-#	OSGEO4W=/d/OSGeo4W64 update.sh
+# To override the default OSGeo4W path (/c/OSGeo4W64),
+#	OSGEO4W_PATH=/d/OSGeo4W64 update.sh
 
 set -e
 
@@ -21,22 +21,22 @@ fi
 # check architecture
 case "$MSYSTEM_CARCH" in
 x86_64)
-	ARCH=x86_64-w64-mingw32
-	BIT=64
+	arch=x86_64-w64-mingw32
+	bit=64
 	;;
 i686)
-	ARCH=i686-w64-mingw32
-	BIT=32
+	arch=i686-w64-mingw32
+	bit=32
 	;;
 *)
 	echo "$MSYSTEM_CARCH: unsupported architecture"
 	exit 1
 esac
 
-tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
+tmp=`dirname $0`; grass_build_scripts=`realpath $tmp`
 
-export MINGW_CHOST=$ARCH
-export PATH="$GRASS_BUILD_SCRIPTS:/mingw$BIT/bin:$PATH"
+export MINGW_CHOST=$arch
+export PATH="$grass_build_scripts:/mingw$bit/bin:$PATH"
 
 # build
 (

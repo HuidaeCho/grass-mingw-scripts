@@ -2,11 +2,11 @@
 # This script configures include/Make/Platform.make and other files for
 # building GRASS GIS.
 #
-# To override the default OSGEO4W (/c/OSGeo4W64),
-#	OSGEO4W=/d/OSGeo4W64 myconfigure.sh
+# To override the default OSGeo4W path (/c/OSGeo4W64),
+#	OSGEO4W_PATH=/d/OSGeo4W64 myconfigure.sh
 
 set -e
-OSGEO4W_ROOT_MSYS=${OSGEO4W-/c/OSGeo4W64}
+osgeo4w_root_msys=${OSGEO4W_PATH-/c/OSGeo4W64}
 
 # see if we're inside the root of the GRASS source code
 if [ ! -f grass.pc.in ]; then
@@ -14,21 +14,21 @@ if [ ! -f grass.pc.in ]; then
 	exit 1
 fi
 
-GRASS_SRC=`pwd`
-tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
+grass_src=`pwd`
+tmp=`dirname $0`; grass_build_scripts=`realpath $tmp`
 
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
-OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \
+OSGEO4W_ROOT_MSYS=$osgeo4w_root_msys \
 ./myconfigure \
 --host=$MINGW_CHOST \
---with-includes=$OSGEO4W_ROOT_MSYS/include \
---with-libs="$OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/bin" \
+--with-includes=$osgeo4w_root_msys/include \
+--with-libs="$osgeo4w_root_msys/lib $osgeo4w_root_msys/bin" \
 --with-nls \
---with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
+--with-freetype-includes=$osgeo4w_root_msys/include/freetype2 \
 --with-bzlib \
---with-geos=$GRASS_SRC/mswindows/osgeo4w/geos-config \
---with-netcdf=$GRASS_BUILD_SCRIPTS/nc-config \
---with-gdal=$GRASS_SRC/mswindows/osgeo4w/gdal-config \
---with-liblas=$GRASS_SRC/mswindows/osgeo4w/liblas-config \
+--with-geos=$grass_src/mswindows/osgeo4w/geos-config \
+--with-netcdf=$grass_build_scripts/nc-config \
+--with-gdal=$grass_src/mswindows/osgeo4w/gdal-config \
+--with-liblas=$grass_src/mswindows/osgeo4w/liblas-config \
 --with-opengl=windows \
 > myconfigure.log 2>&1

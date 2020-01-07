@@ -2,11 +2,11 @@
 # This script packages already built GRASS GIS as a standalone ZIP file that
 # can be extracted to C:\.
 #
-# To override the default OSGEO4W (/c/OSGeo4W64),
-#	OSGEO4W=/d/OSGeo4W64 package.sh
+# To override the default OSGeo4W path (/c/OSGeo4W64),
+#	OSGEO4W_PATH=/d/OSGeo4W64 package.sh
 
 set -e
-OSGEO4W_ROOT_MSYS=${OSGEO4W-/c/OSGeo4W64}
+osgeo4w_root_msys=${OSGEO4W_PATH-/c/OSGeo4W64}
 
 # see if we're inside the root of the GRASS source code
 if [ ! -f grass.pc.in ]; then
@@ -17,32 +17,32 @@ fi
 # check architecture
 case "$MSYSTEM_CARCH" in
 x86_64)
-	ARCH=x86_64-w64-mingw32
-	BIT=64
+	arch=x86_64-w64-mingw32
+	bit=64
 	;;
 i686)
-	ARCH=i686-w64-mingw32
-	BIT=32
+	arch=i686-w64-mingw32
+	bit=32
 	;;
 *)
 	echo "$MSYSTEM_CARCH: unsupported architecture"
 	exit 1
 esac
 
-OSGEO4W_ROOT=`echo $OSGEO4W_ROOT_MSYS | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
-OPT_PATH=$OSGEO4W_ROOT_MSYS/opt
-GRASS_PATH=$OPT_PATH/grass
-VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
-DATE=`date +%Y%m%d`
+osgeo4w_root=`echo $osgeo4w_root_msys | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
+opt_path=$osgeo4w_root_msys/opt
+grass_path=$opt_path/grass
+version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
+date=`date +%Y%m%d`
 
 # copy MinGW libraries
-test -d $GRASS_PATH && rm -rf $GRASS_PATH
-test -d $OPT_PATH || mkdir -p $OPT_PATH
-cp -a dist.$ARCH $GRASS_PATH
-rm -f $GRASS_PATH/grass$VERSION.tmp $GRASS_PATH/etc/fontcap
-cp -a bin.$ARCH/grass$VERSION.py $GRASS_PATH/etc
-cp -a `ldd dist.$ARCH/lib/*.dll | awk '/mingw'$BIT'/{print $3}' |
-	sort -u | grep -v 'lib\(crypto\|ssl\)'` $GRASS_PATH/lib
+test -d $grass_path && rm -rf $grass_path
+test -d $opt_path || mkdir -p $opt_path
+cp -a dist.$arch $grass_path
+rm -f $grass_path/grass$version.tmp $grass_path/etc/fontcap
+cp -a bin.$arch/grass$version.py $grass_path/etc
+cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw'$bit'/{print $3}' |
+	sort -u | grep -v 'lib\(crypto\|ssl\)'` $grass_path/lib
 
 # create batch files
 (
@@ -61,23 +61,22 @@ if not exist %GISBASE%\etc\fontcap (
 	popd
 )
 EOT
-) > $GRASS_PATH/etc/env.bat
-unix2dos $GRASS_PATH/etc/env.bat
+) > $grass_path/etc/env.bat
+unix2dos $grass_path/etc/env.bat
 
-OSGEO4W_ROOT_ESCAPED=`echo $OSGEO4W_ROOT | sed 's/\\\\/\\\\\\\\/g'`
 (
 sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
     -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
-    -e 's/@POSTFIX@/'$VERSION'/g' \
+    -e 's/@POSTFIX@/'$version'/g' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > $GRASS_PATH/grass$VERSION.bat
-unix2dos $GRASS_PATH/grass$VERSION.bat
+) > $grass_path/grass$version.bat
+unix2dos $grass_path/grass$version.bat
 
 # package
-GRASS_SRC=`pwd`
-GRASS_ZIP=$GRASS_SRC/grass$VERSION-$ARCH-osgeo4w$BIT-$DATE.zip
+grass_src=`pwd`
+grass_zip=$grass_src/grass$version-$arch-osgeo4w$bit-$date.zip
 
-cd $OSGEO4W_ROOT_MSYS/..
-OSGEO4W_BASENAME=`basename $OSGEO4W_ROOT_MSYS`
-rm -f $GRASS_SRC/grass*-$ARCH-osgeo4w$BIT-*.zip
-zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"
+cd $osgeo4w_root_msys/..
+osgeo4w_basename=`basename $osgeo4w_root_msys`
+rm -f $grass_src/grass*-$arch-osgeo4w$bit-*.zip
+zip -r $grass_zip $osgeo4w_basename -x "$osgeo4w_basename/var/*" "*/__pycache__/*"

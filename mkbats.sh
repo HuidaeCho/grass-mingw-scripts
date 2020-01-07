@@ -2,11 +2,11 @@
 # This script creates batch files for starting up GRASS GIS from the source
 # directory.
 #
-# To override the default OSGEO4W (/c/OSGeo4W64),
-#	OSGEO4W=/d/OSGeo4W64 mkbats.sh
+# To override the default OSGeo4W path (/c/OSGeo4W64),
+#	OSGEO4W_PATH=/d/OSGeo4W64 mkbats.sh
 
 set -e
-OSGEO4W_ROOT_MSYS=${OSGEO4W-/c/OSGeo4W64}
+osgeo4w_root_msys=${OSGEO4W_PATH-/c/OSGeo4W64}
 
 # see if we're inside the root of the GRASS source code
 if [ ! -f grass.pc.in ]; then
@@ -17,45 +17,45 @@ fi
 # check architecture
 case "$MSYSTEM_CARCH" in
 x86_64)
-	ARCH=x86_64-w64-mingw32
+	arch=x86_64-w64-mingw32
 	;;
 i686)
-	ARCH=i686-w64-mingw32
+	arch=i686-w64-mingw32
 	;;
 *)
 	echo "$MSYSTEM_CARCH: unsupported architecture"
 	exit 1
 esac
 
-OSGEO4W_ROOT=`echo $OSGEO4W_ROOT_MSYS | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
-MSYS2_ROOT=`echo $WD | sed 's#\\\\usr.*##'`
-MINGW_ROOT=`echo "$MSYS2_ROOT$MINGW_PREFIX" | tr / '\\\\'`
+osgeo4w_root=`echo $osgeo4w_root_msys | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
+msys2_root=`echo $WD | sed 's#\\\\usr.*##'`
+mingw_root=`echo "$msys2_root$MINGW_PREFIX" | tr / '\\\\'`
 
-GRASS_SRC_WIN=`pwd -W | tr / '\\\\'`
-GRASS_BIN_WIN="$GRASS_SRC_WIN\\bin.$ARCH"
-GRASS_DIST_WIN="$GRASS_SRC_WIN\\dist.$ARCH"
+grass_src_win=`pwd -W | tr / '\\\\'`
+grass_bin_win="$grass_src_win\\bin.$arch"
+grass_dist_win="$grass_src_win\\dist.$arch"
 
 # create batch files
-sed -e 's/^\(set GISBASE=\).*/\1'$GRASS_DIST_WIN'/' \
+sed -e 's/^\(set GISBASE=\).*/\1'$grass_dist_win'/' \
     mswindows/osgeo4w/env.bat.tmpl
 echo
-echo "set PATH=$MINGW_ROOT\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%"
-) > dist.$ARCH/etc/env.bat
-unix2dos dist.$ARCH/etc/env.bat
+echo "set PATH=$mingw_root\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%"
+) > dist.$arch/etc/env.bat
+unix2dos dist.$arch/etc/env.bat
 
-OSGEO4W_ROOT_ESCAPED=`echo $OSGEO4W_ROOT | sed 's/\\\\/\\\\\\\\/g'`
-MSYS2_ROOT_ESCAPED=`echo $MSYS2_ROOT | sed 's/\\\\/\\\\\\\\/g'`
+osgeo4w_root_escaped=`echo $osgeo4w_root | sed 's/\\\\/\\\\\\\\/g'`
+msys2_root_escaped=`echo $msys2_root | sed 's/\\\\/\\\\\\\\/g'`
 if echo $HOME | grep -q '^/[a-z]\($\|/\)'; then
-	HOME_ESCAPED=`echo $HOME | sed 's#^/\(.\)#\1:/#'`
+	home_escaped=`echo $HOME | sed 's#^/\(.\)#\1:/#'`
 else
-	HOME_ESCAPED="$MSYS2_ROOT_ESCAPED/$HOME"
+	home_escaped="$msys2_root_escaped/$HOME"
 fi
-HOME_ESCAPED=`echo $HOME_ESCAPED | sed 's#//*#\\\\\\\\#g'`
-VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
+home_escaped=`echo $home_escaped | sed 's#//*#\\\\\\\\#g'`
+version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 (
-sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$OSGEO4W_ROOT_ESCAPED'\\bin\2\nSET HOME='$HOME_ESCAPED'/' \
-    -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$GRASS_DIST_WIN'\\etc\\env.bat"/' \
-    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$GRASS_BIN_WIN'\\grass'$VERSION'.py\2/' \
+sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_escaped'\\bin\2\nSET HOME='$home_escaped'/' \
+    -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$grass_dist_win'\\etc\\env.bat"/' \
+    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$grass_bin_win'\\grass'$version'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > bin.$ARCH/grass$VERSION.bat
-unix2dos bin.$ARCH/grass$VERSION.bat
+) > bin.$arch/grass$version.bat
+unix2dos bin.$arch/grass$version.bat

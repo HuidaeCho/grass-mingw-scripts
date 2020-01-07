@@ -10,7 +10,7 @@
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
 # cd grass
-# compile.sh --grass-source=/usr/local/src/grass --osgeo4w=/d/OSGeo4W64 \
+# compile.sh --grass-source=/usr/local/src/grass --osgeo4w-path=/d/OSGeo4W64 \
 #	--update --package > compile.log 2>&1
 #
 
@@ -18,33 +18,33 @@
 set -e
 
 # default paths, but can be overriden from the command line
-OSGEO4W=${OSGEO4W-/c/OSGeo4W64}
+osgeo4w_path=${OSGEO4W_PATH-/c/OSGeo4W64}
 
 # process options
-UPDATE=0
-PACKAGE=0
+update=0
+package=0
 for opt; do
 	case "$opt" in
 	-h|--help)
 		cat<<'EOT'
 Usage: compile.sh [OPTIONS]
 
--h, --help          display this help message
-    --osgeo4w=PATH  OSGeo4W path (default: /c/OSGeo4W64)
-    --update        update the current branch
-    --package       package the compiled build as
-                    grass79-${ARCH}-osgeo4w${BIT}-YYYYMMDD.zip
+-h, --help               display this help message
+    --osgeo4w-path=PATH  OSGeo4W path (default: /c/OSGeo4W64)
+    --update             update the current branch
+    --package            package the compiled build as
+                         grass79-${ARCH}-osgeo4w${BIT}-YYYYMMDD.zip
 EOT
 		exit
 		;;
-	--osgeo4w=*)
-		OSGEO4W=`echo $opt | sed 's/^[^=]*=//'`
+	--osgeo4w-path=*)
+		osgeo4w_path=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--update)
-		UPDATE=1
+		update=1
 		;;
 	--package)
-		PACKAGE=1
+		package=1
 		;;
 	*)
 		echo "$opt: unknown option"
@@ -60,28 +60,28 @@ if [ ! -f grass.pc.in ]; then
 fi
 
 # check path
-if [ ! -d $OSGEO4W ]; then
-	echo "$OSGEO4W: not found"
+if [ ! -d $osgeo4w_path ]; then
+	echo "$osgeo4w_path: not found"
 	exit 1
 fi
-OSGEO4W_ROOT_MSYS=$OSGEO4W
+osgeo4w_root_msys=$osgeo4w_path
 
 # check architecture
 case "$MSYSTEM_CARCH" in
 x86_64)
-	ARCH=x86_64-w64-mingw32
-	BIT=64
+	arch=x86_64-w64-mingw32
+	bit=64
 	;;
 i686)
-	ARCH=i686-w64-mingw32
-	BIT=32
+	arch=i686-w64-mingw32
+	bit=32
 	;;
 *)
 	echo "$MSYSTEM_CARCH: unsupported architecture"
 	exit 1
 esac
 
-if [ $UPDATE -eq 1 -a ! -d .git ]; then
+if [ $update -eq 1 -a ! -d .git ]; then
 	echo "not a git repository"
 	exit 1
 fi
@@ -91,31 +91,31 @@ echo "Started compilation: `date`"
 echo
 
 # update the current branch if requested
-if [ $UPDATE -eq 1 -a -d .git ]; then
+if [ $update -eq 1 -a -d .git ]; then
 	git pull
 fi
 
 # compile
 
-GRASS_SRC=`pwd`
-tmp=`dirname $0`; GRASS_BUILD_SCRIPTS=`realpath $tmp`
+grass_src=`pwd`
+tmp=`dirname $0`; grass_build_scripts=`realpath $tmp`
 
-export MINGW_CHOST=$ARCH
-export PATH="/mingw$BIT/bin:$PATH"
+export MINGW_CHOST=$arch
+export PATH="/mingw$bit/bin:$PATH"
 
 sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
-OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT_MSYS \
+OSGEO4W_ROOT_MSYS=$osgeo4w_root_msys \
 ./myconfigure \
 --host=$MINGW_CHOST \
---with-includes=$OSGEO4W_ROOT_MSYS/include \
---with-libs="$OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/bin" \
+--with-includes=$osgeo4w_root_msys/include \
+--with-libs="$osgeo4w_root_msys/lib $osgeo4w_root_msys/bin" \
 --with-nls \
---with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
+--with-freetype-includes=$osgeo4w_root_msys/include/freetype2 \
 --with-bzlib \
---with-geos=$GRASS_SRC/mswindows/osgeo4w/geos-config \
---with-netcdf=$GRASS_BUILD_SCRIPTS/nc-config \
---with-gdal=$GRASS_SRC/mswindows/osgeo4w/gdal-config \
---with-liblas=$GRASS_SRC/mswindows/osgeo4w/liblas-config \
+--with-geos=$grass_src/mswindows/osgeo4w/geos-config \
+--with-netcdf=$grass_build_scripts/nc-config \
+--with-gdal=$grass_src/mswindows/osgeo4w/gdal-config \
+--with-liblas=$grass_src/mswindows/osgeo4w/liblas-config \
 --with-opengl=windows \
 >> /dev/stdout
 
@@ -123,19 +123,19 @@ make clean default
 
 # package
 
-OPT_PATH=$OSGEO4W_ROOT_MSYS/opt
-GRASS_PATH=$OPT_PATH/grass
-VERSION=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
-DATE=`date +%Y%m%d`
-GRASS_ZIP=$GRASS_SRC/grass$VERSION-$ARCH-osgeo4w$BIT-$DATE.zip
+opt_path=$osgeo4w_root_msys/opt
+grass_path=$opt_path/grass
+version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
+date=`date +%Y%m%d`
+grass_zip=$grass_src/grass$version-$arch-osgeo4w$bit-$date.zip
 
-test -d $GRASS_PATH && rm -rf $GRASS_PATH
-test -d $OPT_PATH || mkdir -p $OPT_PATH
-cp -a dist.$ARCH $GRASS_PATH
-rm -f $GRASS_PATH/grass$VERSION.tmp $GRASS_PATH/etc/fontcap
-cp -a bin.$ARCH/grass$VERSION.py $GRASS_PATH/etc
-cp -a `ldd dist.$ARCH/lib/*.dll | awk '/mingw'$BIT'/{print $3}' |
-	sort -u | grep -v 'lib\(crypto\|ssl\)'` $GRASS_PATH/lib
+test -d $grass_path && rm -rf $grass_path
+test -d $opt_path || mkdir -p $opt_path
+cp -a dist.$arch $grass_path
+rm -f $grass_path/grass$version.tmp $grass_path/etc/fontcap
+cp -a bin.$arch/grass$version.py $grass_path/etc
+cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw'$bit'/{print $3}' |
+	sort -u | grep -v 'lib\(crypto\|ssl\)'` $grass_path/lib
 
 (
 sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
@@ -153,23 +153,23 @@ if not exist %GISBASE%\etc\fontcap (
 	popd
 )
 EOT
-) > $GRASS_PATH/etc/env.bat
-unix2dos $GRASS_PATH/etc/env.bat
+) > $grass_path/etc/env.bat
+unix2dos $grass_path/etc/env.bat
 
 (
 sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
     -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
-    -e 's/@POSTFIX@/'$VERSION'/g' \
+    -e 's/@POSTFIX@/'$version'/g' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > $GRASS_PATH/grass$VERSION.bat
-unix2dos $GRASS_PATH/grass$VERSION.bat
+) > $grass_path/grass$version.bat
+unix2dos $grass_path/grass$version.bat
 
 # package if requested
-if [ $PACKAGE -eq 1 ]; then
-	rm -f grass*-$ARCH-osgeo4w$BIT-*.zip
-	cd $OSGEO4W_ROOT_MSYS/..
-	OSGEO4W_BASENAME=`basename $OSGEO4W_ROOT_MSYS`
-	zip -r $GRASS_ZIP $OSGEO4W_BASENAME -x "$OSGEO4W_BASENAME/var/*" "*/__pycache__/*"
+if [ $package -eq 1 ]; then
+	rm -f grass*-$arch-osgeo4w$bit-*.zip
+	cd $osgeo4w_root_msys/..
+	osgeo4w_basename=`basename $osgeo4w_root_msys`
+	zip -r $grass_zip $osgeo4w_basename -x "$osgeo4w_basename/var/*" "*/__pycache__/*"
 fi
 
 echo
