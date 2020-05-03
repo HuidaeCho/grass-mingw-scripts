@@ -103,9 +103,8 @@ tmp=`dirname $0`; grass_build_scripts=`realpath $tmp`
 export MINGW_CHOST=$arch
 export PATH="/mingw$bit/bin:$PATH"
 
-sed -e 's/-lproj/-lproj_6_2/g' configure > myconfigure
 OSGEO4W_ROOT_MSYS=$osgeo4w_root_msys \
-./myconfigure \
+./configure \
 --host=$MINGW_CHOST \
 --with-includes=$osgeo4w_root_msys/include \
 --with-libs="$osgeo4w_root_msys/lib $osgeo4w_root_msys/bin" \
