@@ -31,9 +31,9 @@ osgeo4w_root=`echo $osgeo4w_root_msys | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
 msys2_root=`echo $WD | sed 's#\\\\usr.*##'`
 mingw_root=`echo "$msys2_root$MINGW_PREFIX" | tr / '\\\\'`
 
-grass_src_win=`pwd -W | tr / '\\\\'`
-grass_bin_win="$grass_src_win\\bin.$arch"
-grass_dist_win="$grass_src_win\\dist.$arch"
+grass_src_win=`pwd -W | sed 's#/#\\\\\\\\#g'`
+grass_bin_win="$grass_src_win\\\\bin.$arch"
+grass_dist_win="$grass_src_win\\\\dist.$arch"
 
 # create batch files
 (
