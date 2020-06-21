@@ -36,6 +36,7 @@ grass_bin_win="$grass_src_win\\bin.$arch"
 grass_dist_win="$grass_src_win\\dist.$arch"
 
 # create batch files
+(
 sed -e 's/^\(set GISBASE=\).*/\1'$grass_dist_win'/' \
     mswindows/osgeo4w/env.bat.tmpl
 echo
