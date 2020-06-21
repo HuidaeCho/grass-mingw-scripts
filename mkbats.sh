@@ -27,36 +27,36 @@ i686)
 	exit 1
 esac
 
-osgeo4w_root=`echo $osgeo4w_root_msys | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
+osgeo4w_root=`echo $osgeo4w_root_msys | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\#g'`
 msys2_root=`echo $WD | sed 's#\\\\usr.*##'`
 mingw_root=`echo "$msys2_root$MINGW_PREFIX" | tr / '\\\\'`
 
-grass_src_win=`pwd -W | sed 's#/#\\\\\\\\#g'`
-grass_bin_win="$grass_src_win\\\\bin.$arch"
-grass_dist_win="$grass_src_win\\\\dist.$arch"
+src_esc=`pwd -W | sed 's#/#\\\\\\\\#g'`
+bin_esc="$src_esc\\\\bin.$arch"
+dist_esc="$src_esc\\\\dist.$arch"
 
 # create batch files
 (
-sed -e 's/^\(set GISBASE=\).*/\1'$grass_dist_win'/' \
+sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
     mswindows/osgeo4w/env.bat.tmpl
 echo
 echo "set PATH=$mingw_root\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%"
 ) > dist.$arch/etc/env.bat
 unix2dos dist.$arch/etc/env.bat
 
-osgeo4w_root_escaped=`echo $osgeo4w_root | sed 's/\\\\/\\\\\\\\/g'`
-msys2_root_escaped=`echo $msys2_root | sed 's/\\\\/\\\\\\\\/g'`
+osgeo4w_root_esc=`echo $osgeo4w_root | sed 's/\\\\/\\\\\\\\/g'`
+msys2_root_esc=`echo $msys2_root | sed 's/\\\\/\\\\\\\\/g'`
 if echo $HOME | grep -q '^/[a-z]\($\|/\)'; then
-	home_escaped=`echo $HOME | sed 's#^/\(.\)#\1:/#'`
+	home=`echo $HOME | sed 's#^/\(.\)#\1:/#'`
 else
-	home_escaped="$msys2_root_escaped/$HOME"
+	home="$msys2_root/$HOME"
 fi
-home_escaped=`echo $home_escaped | sed 's#//*#\\\\\\\\#g'`
+home_esc=`echo $home | sed 's#//*#\\\\\\\\#g'`
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 (
-sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_escaped'\\bin\2\nSET HOME='$home_escaped'/' \
-    -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$grass_dist_win'\\etc\\env.bat"/' \
-    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$grass_bin_win'\\grass'$version'.py\2/' \
+sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_esc'\\bin\2\nSET HOME='$home_esc'/' \
+    -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$dist_esc'\\etc\\env.bat"/' \
+    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$bin_esc'\\grass'$version'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl
 ) > bin.$arch/grass$version.bat
 unix2dos bin.$arch/grass$version.bat
