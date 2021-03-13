@@ -17,18 +17,19 @@ git fetch --all
 git checkout master
 # if upstream/master exists, assume it's OSGeo's master branch
 if echo "$branches" | grep -q '^upstream/master$'; then
-	# merge OSGeo's master
-	git merge upstream/master
+	# rebase OSGeo's master
+	git rebase upstream/master
 else
 	# merge origin/master (either OSGeo's or HuidaeCho's master)
-	git merge origin/master
+	git rebase origin/master
 fi
 # if origin/hcho exists, assume it's HuidaeCho's hcho branch
 if echo "$branches" | grep -q '^origin/hcho$'; then
 	# use hcho because he's cool ;-)
 	git checkout hcho
-	# merge origin/hcho
-	git merge origin/hcho
+	# rebase origin/hcho
+	git rebase origin/hcho
+	# may not be able to rebase
 	# merge master already merged with upstream/master or origin/master
 	git merge master
 fi
