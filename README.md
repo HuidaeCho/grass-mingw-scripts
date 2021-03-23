@@ -1,6 +1,6 @@
 # MinGW scripts for building portable GRASS GIS on MS Windows
 
-This repository contains MinGW scripts for building portable GRASS GIS on 64-bit MS Windows (not tested on 32-bit systems). These scripts will compile [a personal portable daily build](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html#latest-daily-build). Official daily builds from the GRASS GIS development team are available from [here](https://grass.osgeo.org/download/software/ms-windows/).
+This repository contains MinGW scripts for building portable GRASS GIS on 64-bit MS Windows (not tested on 32-bit systems). These scripts will compile [a personal portable daily build](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html#-latest-daily-build). Official daily builds from the GRASS GIS development team are available from [here](https://grass.osgeo.org/download/software/ms-windows/).
 
 Please refer to [How to compile GRASS GIS on MS Windows](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html) to see why I created these scripts in the first place, but I found another use case: portability with no administrative rights.
 
@@ -12,7 +12,7 @@ See [grass-build-scripts](https://github.com/HuidaeCho/grass-build-scripts) for 
 
 ## Just extracting to C:\
 
-My solution was to build it myself daily and deploy it to a shared folder so they can extract it to their C drive. This is possible because MS Windows allows non-administrators to create new folders in the root of the C drive (but not new files there). You can download the latest daily build of GRASS GIS from [here](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html#latest-daily-build).
+My solution was to build it myself daily and deploy it to a shared folder so they can extract it to their C drive. This is possible because MS Windows allows non-administrators to create new folders in the root of the C drive (but not new files there). You can download the latest daily build of GRASS GIS from [here](https://idea.isnew.info/how-to-compile-grass-gis-on-ms-windows.html#-latest-daily-build).
 
 ## Portability
 
