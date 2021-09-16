@@ -58,17 +58,17 @@ Again, 32-bit systems were not tested.
 
 Now, you're ready to build GRASS GIS and don't need to repeat these steps again.
 
-### Building the latest master branch
+### Building the latest main branch
 
 Start `MSYS2 MinGW 64-bit` and run the following commands:
 ```
 cd ~/usr/local/src/grass
 
-# build the latest master branch
+# build the latest main branch
 ../grass-mingw-scripts/compile.sh --pull --package
 ```
 
-The `compile.sh` script will build the latest master branch of the official GRASS GIS repository in `~/usr/local/src/grass/dist.x86_64-w64-mingw32` and package it as `~/usr/local/src/grass/grass79-x86_64-w64-mingw32-osgeo4w64-YYYYMMDD.zip`, which you can simply extract to any drive on other computers without administrative rights.
+The `compile.sh` script will build the latest main branch of the official GRASS GIS repository in `~/usr/local/src/grass/dist.x86_64-w64-mingw32` and package it as `~/usr/local/src/grass/grass79-x86_64-w64-mingw32-osgeo4w64-YYYYMMDD.zip`, which you can simply extract to any drive on other computers without administrative rights.
 
 ### Building the latest hcho branch
 
