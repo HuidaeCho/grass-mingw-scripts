@@ -131,8 +131,8 @@ grass_zip=$grass_src/grass$version-$arch-osgeo4w$bit-$date.zip
 test -d $grass_path && rm -rf $grass_path
 test -d $opt_path || mkdir -p $opt_path
 cp -a dist.$arch $grass_path
-rm -f $grass_path/grass$version.tmp $grass_path/etc/fontcap
-cp -a bin.$arch/grass$version.py $grass_path/etc
+rm -f $grass_path/grass.tmp $grass_path/etc/fontcap
+cp -a bin.$arch/grass.py $grass_path/etc
 cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw'$bit'/{print $3}' |
 	sort -u | grep -v 'lib\(crypto\|ssl\)'` $grass_path/lib
 
@@ -160,8 +160,8 @@ sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
     -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
     -e 's/@POSTFIX@/'$version'/g' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > $grass_path/grass$version.bat
-unix2dos $grass_path/grass$version.bat
+) > $grass_path/grass.bat
+unix2dos $grass_path/grass.bat
 
 # package if requested
 if [ $package -eq 1 ]; then

@@ -58,5 +58,5 @@ sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_esc'\\bin\2\nSET HOME='$home_
     -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$dist_esc'\\etc\\env.bat"/' \
     -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$bin_esc'\\grass'$version'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > bin.$arch/grass$version.bat
-unix2dos bin.$arch/grass$version.bat
+) > bin.$arch/grass.bat
+unix2dos bin.$arch/grass.bat
