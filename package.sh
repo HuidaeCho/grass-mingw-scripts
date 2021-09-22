@@ -40,7 +40,7 @@ test -d $grass_path && rm -rf $grass_path
 test -d $opt_path || mkdir -p $opt_path
 cp -a dist.$arch $grass_path
 rm -f $grass_path/grass.tmp $grass_path/etc/fontcap
-cp -a bin.$arch/grass.py $grass_path/etc
+cp -a bin.$arch/grass.py $grass_path/etc/grass$version.py
 cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw'$bit'/{print $3}' |
 	sort -u | grep -v 'lib\(crypto\|ssl\)'` $grass_path/lib
 
