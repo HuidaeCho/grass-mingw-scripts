@@ -158,7 +158,7 @@ unix2dos $grass_path/etc/env.bat
 (
 sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
     -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
-    -e 's/@POSTFIX@//g' \
+    -e "s/@POSTFIX@/$version/g" \
     mswindows/osgeo4w/grass.bat.tmpl
 ) > $grass_path/grass.bat
 unix2dos $grass_path/grass.bat
