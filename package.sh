@@ -44,13 +44,13 @@ cp -a bin.$arch/grass.py $grass_path/etc/grass$version.py
 cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw'$bit'/{print $3}' |
 	sort -u | grep -v 'lib\(crypto\|ssl\)'` $grass_path/lib
 
-# create batch files for cmd.exe
+# create batch files
 (
 sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
-set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%GISBASE%\\scripts\\cmd;%PATH%
+set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
@@ -61,34 +61,16 @@ if not exist %GISBASE%\etc\fontcap (
 	popd
 )
 EOT
-) > $grass_path/etc/env_cmd.bat
-unix2dos $grass_path/etc/env_cmd.bat
+) > $grass_path/etc/env.bat
+unix2dos $grass_path/etc/env.bat
 
 (
 sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
-    -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\)\(\.bat"\)$/\1opt\\grass\2_cmd\3/' \
+    -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
     -e "s/@POSTFIX@/$version/g" \
     mswindows/osgeo4w/grass.bat.tmpl
-) > $grass_path/grass_cmd.bat
-unix2dos $grass_path/grass_cmd.bat
-
-# create batch files for sh.exe
-sed 's/^REM \(set GRASS_SH\)/\1/; s/cmd/sh/' $grass_path/etc/env_cmd.bat > $grass_path/etc/env.bat
-sed 's/\(\\env\)_cmd\(\.bat\)/\1\2/' $grass_path/grass_cmd.bat > $grass_path/grass.bat
-unix2dos $grass_path/etc/env.bat $grass_path/grass.bat
-
-# move batch files to scripts/cmd and create shell scripts for sh.exe in scripts/sh
-mkdir $grass_path/scripts/cmd $grass_path/scripts/sh
-for bat in $grass_path/bin/*.bat; do
-	mv $bat $grass_path/scripts/cmd
-	name=`basename $bat | sed 's/\.bat$//'`
-	bat=$grass_path/scripts/cmd/$name.bat
-	sh=$grass_path/scripts/sh/$name
-	(
-	echo "#!/bin/sh"
-	sed 's/@//; s/%\([^%]*\)%/\$\1/g; s/%\*/"\$@"/' $bat
-	) > $sh
-done
+) > $grass_path/grass.bat
+unix2dos $grass_path/grass.bat
 
 # package
 grass_src=`pwd`

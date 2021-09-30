@@ -35,16 +35,16 @@ src_esc=`pwd -W | sed 's#/#\\\\\\\\#g'`
 bin_esc="$src_esc\\\\bin.$arch"
 dist_esc="$src_esc\\\\dist.$arch"
 
-# create batch files for cmd.exe
+# create batch files
 (
 sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
-set PATH=$mingw_root\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%GISBASE%\\scripts\\cmd;%PATH%
+set PATH=$mingw_root\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
 EOT
-) > dist.$arch/etc/env_cmd.bat
-unix2dos dist.$arch/etc/env_cmd.bat
+) > dist.$arch/etc/env.bat
+unix2dos dist.$arch/etc/env.bat
 
 osgeo4w_root_esc=`echo $osgeo4w_root | sed 's/\\\\/\\\\\\\\/g'`
 msys2_root_esc=`echo $msys2_root | sed 's/\\\\/\\\\\\\\/g'`
@@ -57,26 +57,8 @@ home_esc=`echo $home | sed 's#//*#\\\\\\\\#g'`
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 (
 sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_esc'\\bin\2\nSET HOME='$home_esc'/' \
-    -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$dist_esc'\\etc\\env_cmd.bat"/' \
+    -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$dist_esc'\\etc\\env.bat"/' \
     -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$bin_esc'\\grass'$version'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > bin.$arch/grass_cmd.bat
-unix2dos bin.$arch/grass_cmd.bat
-
-# create batch files for sh.exe
-sed 's/^REM \(set GRASS_SH\)/\1/; s/cmd/sh/' dist.$arch/etc/env_cmd.bat > dist.$arch/etc/env.bat
-sed 's/\(\\env\)_cmd\(\.bat\)/\1\2/' bin.$arch/grass_cmd.bat > bin.$arch/grass.bat
-unix2dos dist.$arch/etc/env.bat bin.$arch/grass.bat
-
-# move batch files to scripts/cmd and create shell scripts for sh.exe in scripts/sh
-mkdir dist.$arch/scripts/cmd dist.$arch/scripts/sh
-for bat in dist.$arch/bin/*.bat; do
-	mv $bat dist.$arch/scripts/cmd
-	name=`basename $bat | sed 's/\.bat$//'`
-	bat=dist.$arch/scripts/cmd/$name.bat
-	sh=dist.$arch/scripts/sh/$name
-	(
-	echo "#!/bin/sh"
-	sed 's/@//; s/%\([^%]*\)%/\$\1/g; s/%\*/"\$@"/' $bat
-	) > $sh
-done
+) > bin.$arch/grass.bat
+unix2dos bin.$arch/grass.bat
