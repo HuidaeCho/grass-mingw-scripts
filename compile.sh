@@ -175,7 +175,7 @@ for bat in $grass_path/bin/*.bat; do
 	sh=`echo $bat | sed 's/\.bat//'`
 	(
 	echo "#!/bin/sh"
-	sed 's/@//; s/%\([^%]*)%/\$\1/g; s/%\*/"\$@"/' $bat
+	sed 's/@//; s/%\([^%]*\)%/\$\1/g; s/%\*/"\$@"/' $bat
 	) > $sh
 done
 

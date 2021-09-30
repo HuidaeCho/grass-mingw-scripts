@@ -73,6 +73,6 @@ for bat in dist.$arch/bin/*.bat; do
 	sh=`echo $bat | sed 's/\.bat//'`
 	(
 	echo "#!/bin/sh"
-	sed 's/@//; s/%\([^%]*)%/\$\1/g; s/%\*/"\$@"/' $bat
+	sed 's/@//; s/%\([^%]*\)%/\$\1/g; s/%\*/"\$@"/' $bat
 	) > $sh
 done
