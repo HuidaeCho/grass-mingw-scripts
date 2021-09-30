@@ -41,7 +41,7 @@ sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
-set PATH=$mingw_root\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
+set PATH=$mingw_root\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%GISBASE%\\scripts\\cmd;%PATH%
 EOT
 ) > dist.$arch/etc/env_cmd.bat
 unix2dos dist.$arch/etc/env_cmd.bat
@@ -64,13 +64,17 @@ sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_esc'\\bin\2\nSET HOME='$home_
 unix2dos bin.$arch/grass_cmd.bat
 
 # create batch files for sh.exe
-sed 's/^REM \(set GRASS_SH\)/\1/' dist.$arch/etc/env_cmd.bat > dist.$arch/etc/env.bat
+sed 's/^REM \(set GRASS_SH\)/\1/; s/cmd/sh/' dist.$arch/etc/env_cmd.bat > dist.$arch/etc/env.bat
 sed 's/\(\\env\)_cmd\(\.bat\)/\1\2/' bin.$arch/grass_cmd.bat > bin.$arch/grass.bat
 unix2dos dist.$arch/etc/env.bat bin.$arch/grass.bat
 
-# create shell scripts for sh.exe
+# move batch files to scripts/cmd and create shell scripts for sh.exe in scripts/sh
+mkdir dist.$arch/scripts/cmd dist.$arch/scripts/sh
 for bat in dist.$arch/bin/*.bat; do
-	sh=`echo $bat | sed 's/\.bat//'`
+	mv $bat dist.$arch/scripts/cmd
+	name=`basename $bat | sed 's/\.bat$//'`
+	bat=dist.$arch/scripts/cmd/$name.bat
+	sh=dist.$arch/scripts/sh/$name
 	(
 	echo "#!/bin/sh"
 	sed 's/@//; s/%\([^%]*\)%/\$\1/g; s/%\*/"\$@"/' $bat
