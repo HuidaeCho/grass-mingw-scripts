@@ -14,14 +14,14 @@ fi
 branches=`git branch -a --format='%(refname:short)'`
 
 git fetch --all
-git checkout master
-# if upstream/master exists, assume it's OSGeo's master branch
-if echo "$branches" | grep -q '^upstream/master$'; then
-	# rebase OSGeo's master
-	git rebase upstream/master
+git checkout main
+# if upstream/main exists, assume it's OSGeo's main branch
+if echo "$branches" | grep -q '^upstream/main$'; then
+	# rebase OSGeo's main
+	git rebase upstream/main
 else
-	# merge origin/master (either OSGeo's or HuidaeCho's master)
-	git rebase origin/master
+	# merge origin/main (either OSGeo's or HuidaeCho's main)
+	git rebase origin/main
 fi
 # if origin/hcho exists, assume it's HuidaeCho's hcho branch
 if echo "$branches" | grep -q '^origin/hcho$'; then
@@ -30,6 +30,6 @@ if echo "$branches" | grep -q '^origin/hcho$'; then
 	# rebase origin/hcho
 	git rebase origin/hcho
 	# may not be able to rebase
-	# merge master already merged with upstream/master or origin/master
-	git merge master
+	# merge main already merged with upstream/main or origin/main
+	git merge main
 fi

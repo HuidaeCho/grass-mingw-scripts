@@ -1,5 +1,5 @@
 #!/bin/sh
-# This script builds the latest version of the master branch of
+# This script builds the latest version of the main branch of
 # https://github.com/OSGeo/grass.git or the hcho branch of
 # https://github.com/HuidaeCho/grass.git.
 #
