@@ -141,7 +141,8 @@ sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
-set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
+set PYTHONHOME=%OSGEO4W_ROOT%\\apps\\Python37
+set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%OSGEO4W_ROOT%\\apps\\Python37;%OSGEO4W_ROOT%\\apps\\Python37\\Scripts;%PATH%
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
