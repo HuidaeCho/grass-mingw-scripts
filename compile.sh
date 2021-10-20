@@ -19,6 +19,7 @@ set -e
 
 # default paths, but can be overriden from the command line
 osgeo4w_path=${OSGEO4W_PATH-/c/OSGeo4W64}
+addons_path=${ADDONS_PATH-../grass-addons}
 
 # process options
 update=0
@@ -31,6 +32,7 @@ Usage: compile.sh [OPTIONS]
 
 -h, --help               display this help message
     --osgeo4w-path=PATH  OSGeo4W path (default: /c/OSGeo4W64)
+    --addons-path=PATH   grass-addons path (default: ../grass-addons)
     --update             update the current branch
     --package            package the compiled build as
                          grass79-${ARCH}-osgeo4w${BIT}-YYYYMMDD.zip
@@ -39,6 +41,9 @@ EOT
 		;;
 	--osgeo4w-path=*)
 		osgeo4w_path=`echo $opt | sed 's/^[^=]*=//'`
+		;;
+	--addons-path=*)
+		addons_path=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--update)
 		update=1
@@ -120,6 +125,18 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_root_msys \
 
 make clean default
 
+if [ -d $addons_path ]; then
+	MODULE_TOPDIR=`pwd`
+	(
+	cd $addons_path
+	if [ $update -eq 1 -a -d .git ]; then
+		git pull
+	fi
+	cd src
+	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
+	)
+fi
+
 # package
 
 opt_path=$osgeo4w_root_msys/opt
@@ -139,12 +156,43 @@ cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw'$bit'/{print $3}' |
 
 # create batch files
 (
-sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
+sed -e '1i\
+setlocal EnableDelayedExpansion\
+
+s/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
 set PYTHONHOME=%OSGEO4W_ROOT%\\apps\\Python37
 set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%OSGEO4W_ROOT%\\apps\\Python37;%OSGEO4W_ROOT%\\apps\\Python37\\Scripts;%PATH%
+
+rem If GRASS_SH is externally defined, that shell will be used; Otherwise,
+rem GISBASE\etc\sh.bat will be used if it exists; If not, cmd.exe will be used;
+rem This check is mainly for supporting BusyBox for Windows (busybox64.exe)
+rem (https://frippery.org/busybox/)
+if not defined GRASS_SH (
+	set GRASS_SH=%GISBASE%\etc\sh.bat
+	if not exist "!GRASS_SH!" set GRASS_SH=
+)
+
+rem With busybox64.exe and Firefox as the default browser, g.manual fails with
+rem "Your Firefox profile cannot be loaded. It may be missing or inaccessible";
+rem I tried to set GRASS_HTML_BROWSER to the full path of chrome.exe, but it
+rem didn't work; Setting BROWSER to its full path according to the webbrowser
+rem manual worked
+if "%GRASS_SH%" == "%GISBASE%\etc\sh.bat" if not defined BROWSER (
+	for %%i in ("%ProgramFiles%" "%ProgramFiles(x86)%") do (
+		if not defined BROWSER (
+			set BROWSER=%%i
+			set BROWSER=!BROWSER:"=!
+			if exist "!BROWSER!\Google\Chrome\Application\chrome.exe" (
+				set BROWSER=!BROWSER!\Google\Chrome\Application\chrome.exe
+			) else (
+				set BROWSER=
+			)
+		)
+	)
+)
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
