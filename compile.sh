@@ -156,10 +156,7 @@ cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw'$bit'/{print $3}' |
 
 # create batch files
 (
-sed -e '1i\
-setlocal EnableDelayedExpansion\
-
-s/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
+sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
     mswindows/osgeo4w/env.bat.tmpl
 cat<<EOT
 
