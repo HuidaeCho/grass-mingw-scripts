@@ -170,16 +170,19 @@ rem If GRASS_SH is externally defined, that shell will be used; Otherwise,
 rem GISBASE\etc\sh.bat will be used if it exists; If not, cmd.exe will be used;
 rem This check is mainly for supporting BusyBox for Windows (busybox64.exe)
 rem (https://frippery.org/busybox/)
+setlocal EnableDelayedExpansion
 if not defined GRASS_SH (
 	set GRASS_SH=%GISBASE%\etc\sh.bat
 	if not exist "!GRASS_SH!" set GRASS_SH=
 )
+endlocal & set GRASS_SH=%GRASS_SH%
 
 rem With busybox64.exe and Firefox as the default browser, g.manual fails with
 rem "Your Firefox profile cannot be loaded. It may be missing or inaccessible";
 rem I tried to set GRASS_HTML_BROWSER to the full path of chrome.exe, but it
 rem didn't work; Setting BROWSER to its full path according to the webbrowser
 rem manual worked
+setlocal EnableDelayedExpansion
 if "%GRASS_SH%" == "%GISBASE%\etc\sh.bat" if not defined BROWSER (
 	for %%i in ("%ProgramFiles%" "%ProgramFiles(x86)%") do (
 		if not defined BROWSER (
@@ -193,6 +196,7 @@ if "%GRASS_SH%" == "%GISBASE%\etc\sh.bat" if not defined BROWSER (
 		)
 	)
 )
+endlocal & set BROWSER=%BROWSER%
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
