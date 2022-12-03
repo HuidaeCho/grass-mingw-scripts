@@ -4,14 +4,14 @@
 # various things about the netCDF installation. This code was
 # contributed by netCDF user Arlindo DaSilva. Thanks Arlindo!
 
-prefix="/C/OSGeo4W64"
-exec_prefix="/C/OSGeo4W64"
-libdir="/C/OSGeo4W64/lib"
-includedir="/C/OSGeo4W64/include"
+prefix="/C/OSGeo4W"
+exec_prefix="/C/OSGeo4W"
+libdir="/C/OSGeo4W/lib"
+includedir="/C/OSGeo4W/include"
 
 cc="C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/x86_amd64/cl.exe"
-cflags="-I/C/OSGeo4W64/include"
-libs="-L/C/OSGeo4W64/lib -lnetcdf -lhdf5 -lhdf5_hl -lzdll -llibcurl"
+cflags="-I/C/OSGeo4W/include"
+libs="-L/C/OSGeo4W/lib -lnetcdf -lhdf5 -lhdf5_hl -lzdll -llibcurl"
 
 has_dap2="ON"
 if [ -z $has_dap2 -o "$has_dap2" = "OFF" ]; then

@@ -2,11 +2,11 @@
 # This script configures include/Make/Platform.make and other files for
 # building GRASS GIS.
 #
-# To override the default OSGeo4W path (/c/OSGeo4W64),
-#	OSGEO4W_PATH=/d/OSGeo4W64 myconfigure.sh
+# To override the default OSGeo4W path (/c/OSGeo4W),
+#	OSGEO4W_PATH=/d/OSGeo4W myconfigure.sh
 
 set -e
-osgeo4w_root_msys=${OSGEO4W_PATH-/c/OSGeo4W64}
+osgeo4w_root_msys=${OSGEO4W_PATH-/c/OSGeo4W}
 
 # see if we're inside the root of the GRASS source code
 if [ ! -f grass.pc.in ]; then

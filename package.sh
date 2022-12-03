@@ -2,11 +2,11 @@
 # This script packages already built GRASS GIS as a standalone ZIP file that
 # can be extracted to C:\.
 #
-# To override the default OSGeo4W path (/c/OSGeo4W64),
-#	OSGEO4W_PATH=/d/OSGeo4W64 package.sh
+# To override the default OSGeo4W path (/c/OSGeo4W),
+#	OSGEO4W_PATH=/d/OSGeo4W package.sh
 
 set -e
-osgeo4w_root_msys=${OSGEO4W_PATH-/c/OSGeo4W64}
+osgeo4w_root_msys=${OSGEO4W_PATH-/c/OSGeo4W}
 
 # see if we're inside the root of the GRASS source code
 if [ ! -f grass.pc.in ]; then
@@ -52,12 +52,12 @@ cat<<EOT
 
 set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
 
-if not exist %GISBASE%\etc\fontcap (
+if not exist %GISBASE%\\etc\\fontcap (
 	pushd .
 	%~d0
-	cd %GISBASE%\lib
+	cd %GISBASE%\\lib
 	set GISRC=dummy
-	%GISBASE%\bin\g.mkfontcap.exe
+	%GISBASE%\\bin\\g.mkfontcap.exe
 	popd
 )
 EOT

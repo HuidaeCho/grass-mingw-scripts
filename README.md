@@ -84,7 +84,7 @@ You can schedule daily builds and, optionally, copy the latest package to deploy
 4. Select `Daily` and click `Next`.
 5. Set your preferred start time and click `Next`.
 6. Select `Start a program` and click `Next`.
-7. Set `Program/script` to `C:\msys64\usr\bin\bash.exe`, `Add arguments` to `-l ~/usr/local/src/grass-mingw-scripts/build_daily.sh ~/usr/local/src/grass /u/shared/software`, and click `Next`.
+7. Set `Program/script` to `C:\msys64\usr\bin\bash.exe`, `Add arguments` to `-l ~/usr/local/src/grass-mingw-scripts/build.sh ~/usr/local/src/grass /u/shared/software`, and click `Next`.
 8. Click `Finish`.
 
 ## Autocompletion in the `cmd` window

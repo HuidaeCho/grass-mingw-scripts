@@ -10,7 +10,7 @@
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
 # cd grass
-# compile.sh --grass-source=/usr/local/src/grass --osgeo4w-path=/d/OSGeo4W64 \
+# compile.sh --grass-source=/usr/local/src/grass --osgeo4w-path=/d/OSGeo4W \
 #	--update --package > compile.log 2>&1
 #
 
@@ -18,7 +18,7 @@
 set -e
 
 # default paths, but can be overriden from the command line
-osgeo4w_path=${OSGEO4W_PATH-/c/OSGeo4W64}
+osgeo4w_path=${OSGEO4W_PATH-/c/OSGeo4W}
 addons_path=${ADDONS_PATH-../grass-addons}
 
 # process options
@@ -31,7 +31,7 @@ for opt; do
 Usage: compile.sh [OPTIONS]
 
 -h, --help               display this help message
-    --osgeo4w-path=PATH  OSGeo4W path (default: /c/OSGeo4W64)
+    --osgeo4w-path=PATH  OSGeo4W path (default: /c/OSGeo4W)
     --addons-path=PATH   grass-addons path (default: ../grass-addons)
     --update             update the current branch
     --package            package the compiled build as
@@ -169,7 +169,7 @@ rem This check is mainly for supporting BusyBox for Windows (busybox64.exe)
 rem (https://frippery.org/busybox/)
 setlocal EnableDelayedExpansion
 if not defined GRASS_SH (
-	set GRASS_SH=%GISBASE%\etc\sh.bat
+	set GRASS_SH=%GISBASE%\\etc\\sh.bat
 	if not exist "!GRASS_SH!" set GRASS_SH=
 )
 endlocal & set GRASS_SH=%GRASS_SH%
@@ -180,13 +180,13 @@ rem I tried to set GRASS_HTML_BROWSER to the full path of chrome.exe, but it
 rem didn't work; Setting BROWSER to its full path according to the webbrowser
 rem manual worked
 setlocal EnableDelayedExpansion
-if "%GRASS_SH%" == "%GISBASE%\etc\sh.bat" if not defined BROWSER (
+if "%GRASS_SH%" == "%GISBASE%\\etc\\sh.bat" if not defined BROWSER (
 	for %%i in ("%ProgramFiles%" "%ProgramFiles(x86)%") do (
 		if not defined BROWSER (
 			set BROWSER=%%i
 			set BROWSER=!BROWSER:"=!
-			if exist "!BROWSER!\Google\Chrome\Application\chrome.exe" (
-				set BROWSER=!BROWSER!\Google\Chrome\Application\chrome.exe
+			if exist "!BROWSER!\\Google\\Chrome\\Application\\chrome.exe" (
+				set BROWSER=!BROWSER!\\Google\\Chrome\\Application\\chrome.exe
 			) else (
 				set BROWSER=
 			)
@@ -195,12 +195,12 @@ if "%GRASS_SH%" == "%GISBASE%\etc\sh.bat" if not defined BROWSER (
 )
 endlocal & set BROWSER=%BROWSER%
 
-if not exist %GISBASE%\etc\fontcap (
+if not exist %GISBASE%\\etc\\fontcap (
 	pushd .
 	%~d0
-	cd %GISBASE%\lib
+	cd %GISBASE%\\lib
 	set GISRC=dummy
-	%GISBASE%\bin\g.mkfontcap.exe
+	%GISBASE%\\bin\\g.mkfontcap.exe
 	popd
 )
 EOT

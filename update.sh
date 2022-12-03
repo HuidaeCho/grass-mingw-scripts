@@ -7,8 +7,8 @@
 #	update.sh           # update the build
 #	update.sh --package # update and package the build
 #
-# To override the default OSGeo4W path (/c/OSGeo4W64),
-#	OSGEO4W_PATH=/d/OSGeo4W64 update.sh
+# To override the default OSGeo4W path (/c/OSGeo4W),
+#	OSGEO4W_PATH=/d/OSGeo4W update.sh
 
 set -e
 

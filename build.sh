@@ -3,23 +3,23 @@
 #
 # To build the latest
 # cmd.exe /c c:\msys64\usr\bin\bash -l
-#	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
+#	/usr/local/src/grass-mingw-scripts/build.sh /usr/local/src/grass
 #
 # To build the latest and copy it to P:\Archive and U:\Shared\Software
 # cmd.exe /c c:\msys64\usr\bin\bash -l
-#	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
+#	/usr/local/src/grass-mingw-scripts/build.sh /usr/local/src/grass
 #	/p/archive /u/shared/software
 #
 # To build the latest and copy it to P:\Archive and U:\Shared\Software, but
 # delete any previous packages from U:\Shared\Software leaving the latest only
 # cmd.exe /c c:\msys64\usr\bin\bash -l
-#	/usr/local/src/grass-mingw-scripts/build_daily.sh /usr/local/src/grass
+#	/usr/local/src/grass-mingw-scripts/build.sh /usr/local/src/grass
 #	/p/archive -/u/shared/software
 
 set -e
 
 if [ $# -lt 1 ]; then
-	echo "Usage: build_daily.sh /path/to/grass/source [/deploy/path1 /deploy/paty2 ...]"
+	echo "Usage: build.sh /path/to/grass/source [/deploy/path1 /deploy/paty2 ...]"
 	exit 1
 fi
 
@@ -69,4 +69,4 @@ for dir; do
 	fi
 	cp -a $grass_zip $dir
 done
-) > build_daily.log 2>&1
+) > build.log 2>&1
