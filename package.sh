@@ -21,7 +21,6 @@ i686)
 	exit 1
 esac
 
-osgeo4w_root=`echo $OSGEO4W_ROOT | sed 's#^/##; s#/#:\\\\#; s#/#\\\\#g'`
 opt_path=$OSGEO4W_ROOT/opt
 grass_path=$opt_path/grass
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`

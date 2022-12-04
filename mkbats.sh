@@ -55,12 +55,10 @@ else
 fi
 home_esc=`echo $home | sed 's#//*#\\\\\\\\#g'`
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
-(
 sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_esc'\\bin\2\nSET HOME='$home_esc'/' \
     -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$dist_esc'\\etc\\env.bat"/' \
     -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$dist_esc'\\etc\\grass'$version'.py\2/' \
-    mswindows/osgeo4w/grass.bat.tmpl
-) | unix2dos > bin.$arch/grass.bat
+    mswindows/osgeo4w/grass.bat.tmpl | unix2dos > bin.$arch/grass.bat
 
 mv bin.$arch/grass.py dist.$arch/etc/grass$version.py
 
