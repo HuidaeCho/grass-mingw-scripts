@@ -19,19 +19,45 @@ i686)
 	exit 1
 esac
 
+busybox=0
+for opt; do
+	case "$opt" in
+	-h|--help)
+		cat<<'EOT'
+Usage: mkbats.sh [OPTIONS]
+
+-h, --help       display this help message
+    --busybox    create batch files for BusyBox
+EOT
+		exit
+		;;
+	--busybox)
+		busybox=1
+		;;
+	esac
+done
+
 osgeo4w_root=`echo $OSGEO4W_ROOT | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\#g'`
 msys2_root=`echo $WD | sed 's#\\\\usr.*##'`
 mingw_root=`echo "$msys2_root$MINGW_PREFIX" | tr / '\\\\'`
 
 src_esc=`pwd -W | sed 's#/#\\\\\\\\#g'`
-bin_esc="$src_esc\\\\bin.$arch"
 dist_esc="$src_esc\\\\dist.$arch"
 
 # create batch files
-(
-sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
-    mswindows/osgeo4w/env.bat.tmpl
-cat<<EOT
+if [ $busybox -eq 1 ]; then
+	sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
+	    $GRASS_MINGW_SCRIPTS/env.bat | unix2dos > dist.$arch/etc/env.bat
+
+	unix2dos -n $GRASS_MINGW_SCRIPTS/sh.bat dist.$arch/etc/sh.bat
+
+	wget -O dist.$arch/etc/busybox64.exe \
+	    https://frippery.org/files/busybox/busybox64.exe
+else
+	(
+	sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
+	    mswindows/osgeo4w/env.bat.tmpl
+	cat<<EOT
 
 set PATH=$mingw_root\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
 
@@ -44,7 +70,8 @@ if not exist %GISBASE%\\etc\\fontcap (
 	popd
 )
 EOT
-) | unix2dos > dist.$arch/etc/env.bat
+	) | unix2dos > dist.$arch/etc/env.bat
+fi
 
 osgeo4w_root_esc=`echo $osgeo4w_root | sed 's/\\\\/\\\\\\\\/g'`
 msys2_root_esc=`echo $msys2_root | sed 's/\\\\/\\\\\\\\/g'`

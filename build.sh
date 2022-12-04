@@ -21,6 +21,7 @@ esac
 
 merge=0
 addons=0
+busybox=""
 package=0
 for opt; do
 	case "$opt" in
@@ -28,10 +29,11 @@ for opt; do
 		cat<<'EOT'
 Usage: build.sh [OPTIONS]
 
--h, --help               display this help message
-    --merge              merge the upstream repositories
-    --addons             build addons
-    --package            package the build as grass{VERSION}-{ARCH}-osgeo4w{BIT}-{YYYYMMDD}.zip
+-h, --help       display this help message
+    --merge      merge the upstream repositories
+    --addons     build addons
+    --busybox    create batch files for BusyBox
+    --package    package the build as grass{VERSION}-{ARCH}-osgeo4w{BIT}-{YYYYMMDD}.zip
 EOT
 		exit
 		;;
@@ -40,6 +42,9 @@ EOT
 		;;
 	--addons)
 		addons=1
+		;;
+	--busybox)
+		busybox=$opt
 		;;
 	--package)
 		package=1
@@ -59,7 +64,7 @@ fi
 configure.sh
 make.sh clean default
 copydlls.sh
-mkbats.sh
+mkbats.sh $busybox
 
 if [ $addons -eq 1 ]; then
 	cd $GRASS_ADDONS_SRC
@@ -70,6 +75,7 @@ if [ $addons -eq 1 ]; then
 fi
 
 if [ $package -eq 1 ]; then
+	copydist.sh
 	package.sh
 fi
 ) > build.log 2>&1
