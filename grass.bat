@@ -15,7 +15,7 @@ call "%OSGEO4W_ROOT%\opt\grass\etc\env.bat"
 rem
 rem Launch GRASS GIS
 rem
-"%GRASS_PYTHON%" "%GISBASE%\etc\grass83.py" %*
+"%GRASS_PYTHON%" "%GISBASE%\etc\grass@POSTFIX@.py" %*
 
 rem
 rem Pause on error
