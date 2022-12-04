@@ -31,6 +31,6 @@ sed -e 's/^\(set GISBASE=\).*/\1%OSGEO4W_ROOT%\\opt\\grass/' \
     dist.$arch/etc/env.bat > $grass_path/etc/env.bat
 
 sed -e 's/^\(call "\).*\(\\o4w_env\.bat"\)$/\1%~dp0\\..\\..\\bin\2/' \
-    -e 's/^\(call "\).*\(\\env\.bat"\)$/\1%OSGEO4W_ROOT%\\opt\\grass\2/' \
+    -e 's/^\(call "\).*\(\\etc\\env\.bat"\)$/\1%OSGEO4W_ROOT%\\opt\\grass\2/' \
     -e 's/^\("%GRASS_PYTHON%" "\).*\(\\etc\\grass[0-9]*\.py".*\)$/\1%GISBASE%\2/g' \
     bin.$arch/grass.bat > $grass_path/grass.bat
