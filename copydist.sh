@@ -22,8 +22,8 @@ opt_path=$OSGEO4W_ROOT/opt
 grass_path=$opt_path/grass
 
 # copy MinGW libraries
-test -d $grass_path && rm -rf $grass_path
-test -d $opt_path || mkdir -p $opt_path
+[ -d $grass_path ] && rm -rf $grass_path
+[ -d $opt_path ] || mkdir -p $opt_path
 cp -a dist.$arch $grass_path
 
 # update batch files

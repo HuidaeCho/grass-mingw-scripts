@@ -87,6 +87,6 @@ sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_esc'\\bin\2\nSET HOME='$home_
     -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$dist_esc'\\etc\\grass'$version'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl | unix2dos > bin.$arch/grass.bat
 
-test -f bin.$arch/grass.py && mv bin.$arch/grass.py dist.$arch/etc/grass$version.py
+[ -f bin.$arch/grass.py ] && mv bin.$arch/grass.py dist.$arch/etc/grass$version.py
 
 rm -f bin.$arch/grass dist.$arch/grass.tmp dist.$arch/etc/fontcap

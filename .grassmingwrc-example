@@ -16,9 +16,6 @@ GRASS_SRC=$HOME/usr/local/src/grass
 # https://github.com/OSGeo/gdal-grass
 GDAL_GRASS_SRC=$HOME/usr/local/src/gdal-grass
 
-# $GDAL_DRIVER_PATH where these plugins will be installed
-GDAL_PLUGINS_DIR=$HOME/usr/local/lib64/gdalplugins
-
 ################################################################################
 # For building GRASS addons
 # https://github.com/OSGeo/grass-addons

@@ -21,6 +21,7 @@ esac
 
 merge=0
 addons=0
+gdal=0
 busybox=""
 package=0
 for opt; do
@@ -30,23 +31,27 @@ for opt; do
 Usage: build.sh [OPTIONS]
 
 -h, --help       display this help message
-    --merge      merge the upstream repositories
-    --addons     build addons
-    --busybox    create batch files for BusyBox
-    --package    package the build as grass{VERSION}-{ARCH}-osgeo4w{BIT}-{YYYYMMDD}.zip
+-m, --merge      merge the upstream repositories
+-a, --addons     build addons
+-g, --gdal       build gdal-grass
+-b, --busybox    create batch files for BusyBox
+-p, --package    package the build as grass{VERSION}-{ARCH}-osgeo4w{BIT}-{YYYYMMDD}.zip
 EOT
 		exit
 		;;
-	--merge)
+	-m|--merge)
 		merge=1
 		;;
-	--addons)
+	-a|--addons)
 		addons=1
 		;;
-	--busybox)
+	-g|--gdal)
+		gdal=1
+		;;
+	-b|--busybox)
 		busybox=$opt
 		;;
-	--package)
+	-p|--package)
 		package=1
 		;;
 	esac
@@ -55,25 +60,31 @@ done
 export MINGW_CHOST=$arch
 export PATH="$GRASS_MINGW_SCRIPTS:$PATH"
 
-# build
-cd $GRASS_SRC
-if [ $merge -eq 1 ]; then
-	merge.sh
-fi
+echo "Started compilation: `date`"
+echo
+
+[ $merge -eq 1 ] && merge.sh
 configure.sh
 make.sh clean default
+
+if [ $gdal -eq 1 ]; then
+	[ $merge -eq 1 ] && merge.sh --gdal
+	configure.sh --gdal
+	make.sh --gdal clean install
+fi
+
 copydlls.sh
 mkbats.sh $busybox
 
 if [ $addons -eq 1 ]; then
-	cd $GRASS_ADDONS_SRC
-	if [ $merge -eq 1 ]; then
-		merge.sh
-	fi
-	mkaddons.sh
+	[ $merge -eq 1 ] && merge.sh --addons
+	make.sh --addons clean default
 fi
 
 if [ $package -eq 1 ]; then
 	copydist.sh
 	package.sh
 fi
+
+echo
+echo "Completed compilation: `date`"

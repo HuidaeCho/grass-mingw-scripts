@@ -2,23 +2,38 @@
 # This script merges upstream branches.
 
 set -e
+. ${GRASSMINGWRC-~/.grassmingwrc}
 
-remote=`git remote -v | grep "git@github.com:OSGeo/"`
-upstream=`echo $remote | sed 's/ .*//'`
-repo=`echo $remote | sed 's#^.*OSGeo/\|\.git .*##g'`
+branch=main
 
-case $repo in
-grass-addons)
+case "$1" in
+-h|--help)
+	cat<<'EOT'
+Usage: merge.sh [OPTIONS]
+
+-h, --help      display this help message
+-a, --addons    merge GRASS addons (default: GRASS)
+-g, --gdal      merge gdal-grass
+EOT
+	exit
+	;;
+"")
+	cd $GRASS_SRC
+	;;
+-a|--addons)
+	cd $GRASS_ADDONS_SRC
 	branch=grass8
 	;;
-grass|gdal-grass)
-	branch=main
+-g|--gdal)
+	cd $GDAL_GRASS_SRC
 	;;
 *)
-	echo "$repo: Unknown repository"
+	echo "$1: Unknown option"
 	exit 1
 	;;
 esac
+
+upstream=`git remote -v | sed '/git@github.com:OSGeo/!d; s/\t.*//'`
 
 git fetch --all --prune
 git checkout $branch
