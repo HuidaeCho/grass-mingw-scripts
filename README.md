@@ -8,7 +8,7 @@ See [grass-build-scripts](https://github.com/HuidaeCho/grass-build-scripts) for 
 
 ## OSGeo4W installation without administrative rights
 
-[The OSGeo4W installer](http://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe) requires [administrative rights](https://trac.osgeo.org/osgeo4w/ticket/304), but most IT departments, if not all, in many institutes and universities do not give out administrative rights to faculty and students. They may provide a means for installing selected software from their proprietary software center, but, usually, not all packages are maintained up to date. I have personally experienced this problem and my students were not able to install the latest daily build of GRASS GIS.
+[The OSGeo4W installer](https://download.osgeo.org/osgeo4w/v2/osgeo4w-setup.exe) requires [administrative rights](https://trac.osgeo.org/osgeo4w/ticket/304), but most IT departments, if not all, in many institutes and universities do not give out administrative rights to faculty and students. They may provide a means for installing selected software from their proprietary software center, but, usually, not all packages are maintained up to date. I have personally experienced this problem and my students were not able to install the latest daily build of GRASS GIS.
 
 ## Just extracting to C:\
 
@@ -16,7 +16,7 @@ My solution was to build it myself daily and deploy it to a shared folder so the
 
 ## Portability
 
-You can extract this build to anywhere including external USB drives to make GRASS GIS portable. Just run `E:\OSGeo4W64\opt\grass\grass79.bat` where `E:` is your external drive.
+You can extract this build to anywhere including external USB drives to make GRASS GIS portable. Just run `E:\OSGeo4W\opt\grass\grass.bat` where `E:` is your external drive.
 
 ## How to compile the latest version of GRASS GIS
 
@@ -24,23 +24,23 @@ Again, 32-bit systems were not tested.
 
 ### Preparing a building environment
 
-1. Start a `cmd` window and run the following command to install [OSGeo4W](http://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe) to `C:\OSGeo4W64`:
+1. Start a `cmd` window and run the following command to install [OSGeo4W](https://download.osgeo.org/osgeo4w/v2/osgeo4w-setup.exe) to `C:\OSGeo4W`:
    ```batch
-   osgeo4w-setup-x86_64.exe -A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-numpy,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel
+   osgeo4w-setup.exe -A -g -k -q -s https://download.osgeo.org/osgeo4w/v2/x86_64/ -P python3-wxpython,python3-pywin32,proj-devel,gdal-devel,liblas-devel,netcdf-devel,geos-devel,libtiff-devel,libpng-devel,sqlite3-devel,cairo-devel,freetype-devel,zstd-devel
    ```
 2. Install [MSYS2](https://www.msys2.org/) to `C:\msys64`.
 3. Start `MSYS2 MinGW 64-bit` and run the following command:
    ```bash
-   pacman -S tar libintl make bison diffutils git dos2unix zip mingw-w64-x86_64-toolchain mingw-w64-x86_64-cairo mingw-w64-x86_64-python3-six
+   pacman --noconfirm -S tar libintl make flex bison diffutils git dos2unix zip mingw-w64-x86_64-gcc libbz2-devel mingw-w64-x86_64-libsystre mingw-w64-x86_64-fftw mingw-w64-x86_64-pkg-config
    ```
 4. Compile GRASS GIS.
-   ```
+   ```bash
    # add two export lines to ~/.bash_profile
    cat <<'EOT' >> ~/.bash_profile
    export LC_ALL=C
-   export PATH="/mingw64/bin:/c/osgeo4w64/bin:$PATH"
-   # for a 32-bit system
-   # export PATH="/mingw32/bin:/c/osgeo4w/bin:$PATH"
+   export PATH="/c/osgeo4w/bin:/mingw64/bin:$PATH"
+   export PROJ_LIB="/c/osgeo4w/share/proj"
+   export PYTHONHOME="/c/osgeo4w/apps/python39"
    EOT
 
    # source ~/.bash_profile
@@ -58,21 +58,14 @@ Again, 32-bit systems were not tested.
 
 Now, you're ready to build GRASS GIS and don't need to repeat these steps again.
 
-### Building the latest main branch
+### Building and packaging GRASS GIS
 
-Start `MSYS2 MinGW 64-bit` and run the following commands:
-```
-cd ~/usr/local/src/grass
-
-# build the latest main branch
-../grass-mingw-scripts/compile.sh --pull --package
+Copy `.grassmingwrc-example` to `$HOME/.grassmingwrc` and edit it to your paths. Start `MSYS2 MinGW 64-bit` and run the following command:
+```bash
+build.sh --package
 ```
 
-The `compile.sh` script will build the latest main branch of the official GRASS GIS repository in `~/usr/local/src/grass/dist.x86_64-w64-mingw32` and package it as `~/usr/local/src/grass/grass79-x86_64-w64-mingw32-osgeo4w64-YYYYMMDD.zip`, which you can simply extract to any drive on other computers without administrative rights.
-
-### Building the latest hcho branch
-
-If you want to build the latest hcho branch of my personal repository that includes all my personal changes that may not have been merged into the official repository yet, change `https://github.com/OSGeo/grass.git` to `https://github.com/HuidaeCho/grass.git`.
+The `build.sh` script will build GRASS GIS in `~/usr/local/src/grass/dist.x86_64-w64-mingw32` and optionally package it as `~/usr/local/src/grass/grass83-x86_64-w64-mingw32-osgeo4w64-YYYYMMDD.zip`, which you can simply extract to any drive on other computers without administrative rights.
 
 ### Scheduling daily builds
 
@@ -84,17 +77,25 @@ You can schedule daily builds and, optionally, copy the latest package to deploy
 4. Select `Daily` and click `Next`.
 5. Set your preferred start time and click `Next`.
 6. Select `Start a program` and click `Next`.
-7. Set `Program/script` to `C:\msys64\usr\bin\bash.exe`, `Add arguments` to `-l ~/usr/local/src/grass-mingw-scripts/build.sh ~/usr/local/src/grass /u/shared/software`, and click `Next`.
+7. Set `Program/script` to `C:\msys64\usr\bin\bash.exe`, `Add arguments` to `-l ~/usr/local/src/grass-mingw-scripts/deploy.sh /u/shared/software`, and click `Next`.
 8. Click `Finish`.
 
 ## Autocompletion in the `cmd` window
 
-GRASS GIS has a lot of command-line modules and I sometimes rely on autocompletion to find some module names in Linux. However, in MS Windows, the `cmd` window has limited autocompletion features compared to the bash shell and does not allow me to complete command names. You may want to replace the default shell with the MSYS shell by uncommenting `GRASS_SH` in `C:\OSGeo4W64\opt\grass\etc\env.bat`, but GRASS modules written in Python won't work because batch file wrappers cannot be executed properly from the MSYS shell. You would have to type full batch filenames including `.bat`, but, even then, it would fail with `@%GRASS_PYTHON%: command not found`. The MSYS shell cannot just handle batch files nicely.
+GRASS GIS has a lot of command-line modules and I sometimes rely on autocompletion to find some module names in Linux. However, in MS Windows, the `cmd` window has limited autocompletion features compared to the bash shell and does not allow me to complete command names. You may want to replace the default shell with the MSYS shell by uncommenting `GRASS_SH` in `C:\OSGeo4W\opt\grass\etc\env.bat`, but GRASS modules written in Python won't work because batch file wrappers cannot be executed properly from the MSYS shell. You would have to type full batch filenames including `.bat`, but, even then, it would fail with `@%GRASS_PYTHON%: command not found`. The MSYS shell cannot just handle batch files nicely.
 
-I found a great autocompletion utility called [Clink](http://mridgers.github.io/clink/). It runs with the `cmd` window and supports command name completion. The easiest way to run Clink with `cmd` is to use its autorun install.
+I found a great autocompletion utility called [Clink](https://github.com/chrisant996/clink). It runs with the `cmd` window and supports command name completion. The easiest way to run Clink with `cmd` is to use its autorun install.
 
 ```batch
-clink_x64.exe autorun install
+clink autorun install
 ```
 
 Clink will automatically run whenever you start `cmd`.
+
+## BusyBox for Windows
+
+Alternatively, you can use [BusyBox for Windows](https://frippery.org/busybox/).
+
+```bash
+build.sh --busybox --package
+```
