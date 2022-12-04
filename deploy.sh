@@ -25,7 +25,6 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 
-(
 # check architecture
 case "$MSYSTEM_CARCH" in
 x86_64)
@@ -41,7 +40,7 @@ i686)
 	exit 1
 esac
 
-export PATH="$GRASS_MINGW_SCRIPTS:/mingw$bit/bin:$PATH"
+export PATH="$GRASS_MINGW_SCRIPTS:$PATH"
 
 build.sh --merge --addons --busybox --package
 
@@ -63,4 +62,3 @@ for dir; do
 	fi
 	cp -a $grass_zip $dir
 done
-) > deploy.log 2>&1

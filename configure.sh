@@ -20,5 +20,4 @@ OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT \
 --with-geos=$GRASS_SRC/mswindows/osgeo4w/geos-config \
 --with-gdal=$GRASS_SRC/mswindows/osgeo4w/gdal-config \
 --with-liblas=$GRASS_SRC/mswindows/osgeo4w/liblas-config \
---with-opengl=windows \
-> configure.log 2>&1
+--with-opengl=windows

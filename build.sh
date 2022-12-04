@@ -53,10 +53,9 @@ EOT
 done
 
 export MINGW_CHOST=$arch
-export PATH="$GRASS_MINGW_SCRIPTS:/mingw$bit/bin:$PATH"
+export PATH="$GRASS_MINGW_SCRIPTS:$PATH"
 
 # build
-(
 cd $GRASS_SRC
 if [ $merge -eq 1 ]; then
 	merge.sh
@@ -78,4 +77,3 @@ if [ $package -eq 1 ]; then
 	copydist.sh
 	package.sh
 fi
-) > build.log 2>&1
