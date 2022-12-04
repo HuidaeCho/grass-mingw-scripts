@@ -1,11 +1,5 @@
 #!/bin/sh
 # This script builds GRASS GIS using other scripts.
-#
-# Usage:
-#	build.sh
-#	build.sh --merge
-#	build.sh --addons
-#	build.sh --package
 
 set -e
 . ${GRASSMINGWRC-~/.grassmingwrc}
@@ -26,22 +20,32 @@ i686)
 esac
 
 merge=0
-package=0
 addons=0
+package=0
 for opt; do
-	case $opt in
-	-m|--merge)
+	case "$opt" in
+	-h|--help)
+		cat<<'EOT'
+Usage: build.sh [OPTIONS]
+
+-h, --help               display this help message
+    --merge              merge the upstream repositories
+    --addons             build addons
+    --package            package the build as grass{VERSION}-{ARCH}-osgeo4w{BIT}-{YYYYMMDD}.zip
+EOT
+		exit
+		;;
+	--merge)
 		merge=1
 		;;
-	-p|--package)
-		package=1
-		;;
-	-a|--addons)
+	--addons)
 		addons=1
+		;;
+	--package)
+		package=1
 		;;
 	esac
 done
-exit
 
 export MINGW_CHOST=$arch
 export PATH="$GRASS_MINGW_SCRIPTS:/mingw$bit/bin:$PATH"
@@ -68,4 +72,4 @@ fi
 if [ $package -eq 1 ]; then
 	package.sh
 fi
-) > update.log 2>&1
+) > build.log 2>&1
