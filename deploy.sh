@@ -43,7 +43,7 @@ esac
 
 export PATH="$GRASS_MINGW_SCRIPTS:/mingw$bit/bin:$PATH"
 
-update.sh
+build.sh --merge --addons --package
 
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 date=`date +%Y%m%d`
