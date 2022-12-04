@@ -1,3 +1,12 @@
+# OSGeo4W
+# https://download.osgeo.org/osgeo4w/v2/x86_64/
+OSGEO4W_ROOT=/c/OSGeo4W
+
+################################################################################
+# It's not possible to find this path by symbolic link on Windows
+GRASS_MINGW_SCRIPTS=$HOME/usr/local/src/grass-mingw-scripts
+
+################################################################################
 # For building the GRASS core
 # https://github.com/OSGeo/grass
 GRASS_SRC=$HOME/usr/local/src/grass

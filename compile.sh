@@ -18,8 +18,8 @@
 set -e
 
 # default paths, but can be overriden from the command line
-osgeo4w_path=${OSGEO4W_PATH-/c/OSGeo4W}
-addons_path=${ADDONS_PATH-../grass-addons}
+osgeo4w_root=${OSGEO4W_PATH-/c/OSGeo4W}
+addons_src=${ADDONS_SRC-../grass-addons}
 
 # process options
 update=0
@@ -31,19 +31,19 @@ for opt; do
 Usage: compile.sh [OPTIONS]
 
 -h, --help               display this help message
-    --osgeo4w-path=PATH  OSGeo4W path (default: /c/OSGeo4W)
-    --addons-path=PATH   grass-addons path (default: ../grass-addons)
+    --osgeo4w-root=PATH  OSGeo4W root (default: /c/OSGeo4W)
+    --addons-src=PATH    grass-addons path (default: ../grass-addons)
     --update             update the current branch
     --package            package the compiled build as
                          grass79-${ARCH}-osgeo4w${BIT}-YYYYMMDD.zip
 EOT
 		exit
 		;;
-	--osgeo4w-path=*)
-		osgeo4w_path=`echo $opt | sed 's/^[^=]*=//'`
+	--osgeo4w-root=*)
+		osgeo4w_root=`echo $opt | sed 's/^[^=]*=//'`
 		;;
-	--addons-path=*)
-		addons_path=`echo $opt | sed 's/^[^=]*=//'`
+	--addons-src=*)
+		addons_src=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--update)
 		update=1
@@ -52,7 +52,7 @@ EOT
 		package=1
 		;;
 	*)
-		echo "$opt: unknown option"
+		echo "$opt: Unknown option"
 		exit 1
 		;;
 	esac
@@ -65,11 +65,11 @@ if [ ! -f grass.pc.in ]; then
 fi
 
 # check path
-if [ ! -d $osgeo4w_path ]; then
-	echo "$osgeo4w_path: not found"
+if [ ! -d $osgeo4w_root ]; then
+	echo "$osgeo4w_root: Not found"
 	exit 1
 fi
-osgeo4w_root_msys=$osgeo4w_path
+osgeo4w_root_msys=$osgeo4w_root
 
 # check architecture
 case "$MSYSTEM_CARCH" in
@@ -82,12 +82,12 @@ i686)
 	bit=32
 	;;
 *)
-	echo "$MSYSTEM_CARCH: unsupported architecture"
+	echo "$MSYSTEM_CARCH: Unsupported architecture"
 	exit 1
 esac
 
 if [ $update -eq 1 -a ! -d .git ]; then
-	echo "not a git repository"
+	echo "Not a git repository"
 	exit 1
 fi
 
@@ -125,10 +125,10 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_root_msys \
 
 make clean default
 
-if [ -d $addons_path ]; then
+if [ -d $addons_src ]; then
 	MODULE_TOPDIR=`pwd`
 	(
-	cd $addons_path
+	cd $addons_src
 	if [ $update -eq 1 -a -d .git ]; then
 		git pull
 	fi

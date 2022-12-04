@@ -1,18 +1,10 @@
 #!/bin/sh
 # This script creates batch files for starting up GRASS GIS from the source
 # directory.
-#
-# To override the default OSGeo4W path (/c/OSGeo4W),
-#	OSGEO4W_PATH=/d/OSGeo4W mkbats.sh
 
 set -e
-osgeo4w_root_msys=${OSGEO4W_PATH-/c/OSGeo4W}
-
-# see if we're inside the root of the GRASS source code
-if [ ! -f grass.pc.in ]; then
-	echo "Please run this script from the root of the GRASS source code"
-	exit 1
-fi
+. ${GRASSMINGWRC-~/.grassmingwrc}
+cd $GRASS_SRC
 
 # check architecture
 case "$MSYSTEM_CARCH" in
@@ -23,11 +15,11 @@ i686)
 	arch=i686-w64-mingw32
 	;;
 *)
-	echo "$MSYSTEM_CARCH: unsupported architecture"
+	echo "$MSYSTEM_CARCH: Unsupported architecture"
 	exit 1
 esac
 
-osgeo4w_root=`echo $osgeo4w_root_msys | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\#g'`
+osgeo4w_root=`echo $OSGEO4W_ROOT | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\#g'`
 msys2_root=`echo $WD | sed 's#\\\\usr.*##'`
 mingw_root=`echo "$msys2_root$MINGW_PREFIX" | tr / '\\\\'`
 
@@ -42,9 +34,17 @@ sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
 cat<<EOT
 
 set PATH=$mingw_root\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
+
+if not exist %GISBASE%\\etc\\fontcap (
+	pushd .
+	%~d0
+	cd %GISBASE%\\lib
+	set GISRC=dummy
+	%GISBASE%\\bin\\g.mkfontcap.exe
+	popd
+)
 EOT
-) > dist.$arch/etc/env.bat
-unix2dos dist.$arch/etc/env.bat
+) | unix2dos > dist.$arch/etc/env.bat
 
 osgeo4w_root_esc=`echo $osgeo4w_root | sed 's/\\\\/\\\\\\\\/g'`
 msys2_root_esc=`echo $msys2_root | sed 's/\\\\/\\\\\\\\/g'`
@@ -58,7 +58,10 @@ version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make
 (
 sed -e 's/^\(call "\)%~dp0\(.*\)$/\1'$osgeo4w_root_esc'\\bin\2\nSET HOME='$home_esc'/' \
     -e 's/^call "%OSGEO4W_ROOT%.*\\env\.bat"$/call "'$dist_esc'\\etc\\env.bat"/' \
-    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$bin_esc'\\grass'$version'.py\2/' \
+    -e 's/^\("%GRASS_PYTHON%" "\).*\?\(".*\)/\1'$dist_esc'\\etc\\grass'$version'.py\2/' \
     mswindows/osgeo4w/grass.bat.tmpl
-) > bin.$arch/grass.bat
-unix2dos bin.$arch/grass.bat
+) | unix2dos > bin.$arch/grass.bat
+
+mv bin.$arch/grass.py dist.$arch/etc/grass$version.py
+
+rm -f bin.$arch/grass dist.$arch/grass.tmp dist.$arch/etc/fontcap

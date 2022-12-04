@@ -2,12 +2,8 @@
 # This script copies dependent DLLs from MinGW.
 
 set -e
-
-# see if we're inside the root of the GRASS source code
-if [ ! -f grass.pc.in ]; then
-	echo "Please run this script from the root of the GRASS source code"
-	exit 1
-fi
+. ${GRASSMINGWRC-~/.grassmingwrc}
+cd $GRASS_SRC
 
 # check architecture
 case "$MSYSTEM_CARCH" in
@@ -20,7 +16,7 @@ i686)
 	bit=32
 	;;
 *)
-	echo "$MSYSTEM_CARCH: unsupported architecture"
+	echo "$MSYSTEM_CARCH: Unsupported architecture"
 	exit 1
 esac
 

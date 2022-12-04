@@ -1,41 +1,31 @@
 #!/bin/sh
 # This script is meant to be run by Task Scheduler.
 #
-# To build the latest
+# To build the latest:
 # cmd.exe /c c:\msys64\usr\bin\bash -l
-#	/usr/local/src/grass-mingw-scripts/build.sh /usr/local/src/grass
+#	/usr/local/src/grass-mingw-scripts/deploy.sh
 #
-# To build the latest and copy it to P:\Archive and U:\Shared\Software
+# To build the latest and copy it to P:\Archive and U:\Shared\Software:
 # cmd.exe /c c:\msys64\usr\bin\bash -l
-#	/usr/local/src/grass-mingw-scripts/build.sh /usr/local/src/grass
+#	/usr/local/src/grass-mingw-scripts/deploy.sh
 #	/p/archive /u/shared/software
 #
 # To build the latest and copy it to P:\Archive and U:\Shared\Software, but
-# delete any previous packages from U:\Shared\Software leaving the latest only
+# delete any previous packages from U:\Shared\Software leaving the latest only:
 # cmd.exe /c c:\msys64\usr\bin\bash -l
-#	/usr/local/src/grass-mingw-scripts/build.sh /usr/local/src/grass
+#	/usr/local/src/grass-mingw-scripts/deploy.sh
 #	/p/archive -/u/shared/software
 
 set -e
+. ${GRASSMINGWRC-~/.grassmingwrc}
+cd $GRASS_SRC
 
 if [ $# -lt 1 ]; then
-	echo "Usage: build.sh /path/to/grass/source [/deploy/path1 /deploy/paty2 ...]"
+	echo "Usage: deploy.sh /path/to/grass/source [/deploy/path1 /deploy/paty2 ...]"
 	exit 1
 fi
 
-grass_src=$1; shift
-if [ ! -d $grass_src ]; then
-	echo "$grass_src: No such directory"
-	exit 1
-fi
-
-cd $grass_src
 (
-tmp=`dirname $0`; grass_build_scripts=`realpath $tmp`
-
-# NOTE: add your options here
-$grass_build_scripts/compile.sh --update --package
-
 # check architecture
 case "$MSYSTEM_CARCH" in
 x86_64)
@@ -47,9 +37,13 @@ i686)
 	bit=32
 	;;
 *)
-	echo "$MSYSTEM_CARCH: unsupported architecture"
+	echo "$MSYSTEM_CARCH: Unsupported architecture"
 	exit 1
 esac
+
+export PATH="$GRASS_MINGW_SCRIPTS:/mingw$bit/bin:$PATH"
+
+update.sh
 
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 date=`date +%Y%m%d`
@@ -69,4 +63,4 @@ for dir; do
 	fi
 	cp -a $grass_zip $dir
 done
-) > build.log 2>&1
+) > deploy.log 2>&1

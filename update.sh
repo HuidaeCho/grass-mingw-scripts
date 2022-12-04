@@ -1,22 +1,14 @@
 #!/bin/sh
 # This script builds the latest version of the main branch of
-# https://github.com/OSGeo/grass.git or the hcho branch of
-# https://github.com/HuidaeCho/grass.git.
+# https://github.com/OSGeo/grass.git and the grass8 branch of
+# https://github.com/OSGeo/grass-addons.git.
 #
 # Usage:
 #	update.sh           # update the build
 #	update.sh --package # update and package the build
-#
-# To override the default OSGeo4W path (/c/OSGeo4W),
-#	OSGEO4W_PATH=/d/OSGeo4W update.sh
 
 set -e
-
-# see if we're inside the root of the GRASS source code
-if [ ! -f grass.pc.in ]; then
-	echo "Please run this script from the root of the GRASS source code"
-	exit 1
-fi
+. ${GRASSMINGWRC-~/.grassmingwrc}
 
 # check architecture
 case "$MSYSTEM_CARCH" in
@@ -29,27 +21,29 @@ i686)
 	bit=32
 	;;
 *)
-	echo "$MSYSTEM_CARCH: unsupported architecture"
+	echo "$MSYSTEM_CARCH: Unsupported architecture"
 	exit 1
 esac
 
-tmp=`dirname $0`; grass_build_scripts=`realpath $tmp`
-
 export MINGW_CHOST=$arch
-export PATH="$grass_build_scripts:/mingw$bit/bin:$PATH"
+export PATH="$GRASS_MINGW_SCRIPTS:/mingw$bit/bin:$PATH"
 
 # build
 (
+cd $GRASS_SRC
 merge.sh
-myconfigure.sh
-mymake.sh clean default
+configure.sh
+make.sh clean default
+copydlls.sh
+mkbats.sh
+
+cd $GRASS_ADDONS_SRC
+merge.sh
+mkaddons.sh
 
 case "$1" in
--p|--package)
+-p|-package|--package)
 	package.sh
-	;;
-*)
-	mkbats.sh
 	;;
 esac
 ) > update.log 2>&1
