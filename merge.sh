@@ -7,13 +7,18 @@ remote=`git remote -v | grep "git@github.com:OSGeo/"`
 upstream=`echo $remote | sed 's/ .*//'`
 repo=`echo $remote | sed 's#^.*OSGeo/\|\.git .*##g'`
 
-if [ $repo = "grass" ]; then
-	branch=main
-elif [ $repo = "grass-addons" ]; then
+case $repo in
+grass-addons)
 	branch=grass8
-else
+	;;
+grass|gdal-grass)
+	branch=main
+	;;
+*)
+	echo "$repo: Unknown repository"
 	exit 1
-fi
+	;;
+esac
 
 git fetch --all --prune
 git checkout $branch
