@@ -58,7 +58,7 @@ EOT
 done
 
 export MINGW_CHOST=$arch
-export PATH="$GRASS_MINGW_SCRIPTS:$PATH"
+export PATH="$(dirname $(realpath $0)):$PATH"
 
 echo "Started compilation: `date`"
 echo

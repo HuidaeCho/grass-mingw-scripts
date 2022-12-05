@@ -46,10 +46,11 @@ dist_esc="$src_esc\\\\dist.$arch"
 
 # create batch files
 if [ $busybox -eq 1 ]; then
-	sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
-	    $GRASS_MINGW_SCRIPTS/env.bat | unix2dos > dist.$arch/etc/env.bat
+	scripts=$(dirname $(realpath $0))
+	sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' $scripts/env.bat |
+		unix2dos > dist.$arch/etc/env.bat
 
-	unix2dos -n $GRASS_MINGW_SCRIPTS/sh.bat dist.$arch/etc/sh.bat
+	unix2dos -n $scripts/sh.bat dist.$arch/etc/sh.bat
 
 	wget -O dist.$arch/etc/busybox64.exe \
 		https://frippery.org/files/busybox/busybox64.exe
