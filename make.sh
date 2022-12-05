@@ -29,6 +29,9 @@ EOT
 	;;
 esac
 
+# use OSGeo4W Python
+export PATH="$OSGEO4W_ROOT/bin:$PATH"
+
 case "$opt" in
 "")
 	cd $GRASS_SRC

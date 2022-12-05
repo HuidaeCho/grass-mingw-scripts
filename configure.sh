@@ -5,6 +5,9 @@
 set -e
 . ${GRASSMINGWRC-~/.grassmingwrc}
 
+# use OSGeo4W *-config
+export PATH="$OSGEO4W_ROOT/bin:$PATH"
+
 case "$1" in
 "")
 	cd $GRASS_SRC
