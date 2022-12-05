@@ -9,6 +9,15 @@ set -e
 export PATH="$OSGEO4W_ROOT/bin:$PATH"
 
 case "$1" in
+-h|--help)
+	cat<<'EOT'
+Usage: configure.sh [OPTIONS]
+
+-h, --help    display this help message
+-g, --gdal    configure gdal-grass (default: configure GRASS)
+EOT
+	exit
+	;;
 "")
 	cd $GRASS_SRC
 	OSGEO4W_ROOT_MSYS=$OSGEO4W_ROOT \
@@ -27,7 +36,7 @@ case "$1" in
 	--with-liblas=$GRASS_SRC/mswindows/osgeo4w/liblas-config \
 	--with-opengl=windows
 	;;
-gdal)
+-g|--gdal)
 	cd $GDAL_GRASS_SRC
 	dist=$GRASS_SRC/dist.x86_64-w64-mingw32
 	./configure \
