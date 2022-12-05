@@ -31,6 +31,7 @@ esac
 
 # use OSGeo4W Python
 export PATH="$OSGEO4W_ROOT/bin:$PATH"
+export PYTHONHOME="$OSGEO4W_ROOT/apps/python39"
 
 case "$opt" in
 "")
