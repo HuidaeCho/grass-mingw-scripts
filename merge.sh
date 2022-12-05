@@ -33,7 +33,7 @@ EOT
 	;;
 esac
 
-upstream=`git remote -v | sed '/git@github.com:OSGeo/!d; s/\t.*//'`
+upstream=`git remote -v | sed '/github.com.OSGeo/!d; s/\t.*//'`
 
 git fetch --all --prune
 git checkout $branch
