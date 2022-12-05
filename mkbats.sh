@@ -52,7 +52,7 @@ if [ $busybox -eq 1 ]; then
 	unix2dos -n $GRASS_MINGW_SCRIPTS/sh.bat dist.$arch/etc/sh.bat
 
 	wget -O dist.$arch/etc/busybox64.exe \
-	    https://frippery.org/files/busybox/busybox64.exe
+		https://frippery.org/files/busybox/busybox64.exe
 else
 	(
 	sed -e 's/^\(set GISBASE=\).*/\1'$dist_esc'/' \
