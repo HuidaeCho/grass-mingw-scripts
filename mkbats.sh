@@ -27,11 +27,11 @@ for opt; do
 Usage: mkbats.sh [OPTIONS]
 
 -h, --help       display this help message
-    --busybox    create batch files for BusyBox
+-b, --busybox    create batch files for BusyBox
 EOT
 		exit
 		;;
-	--busybox)
+	-b|--busybox)
 		busybox=1
 		;;
 	esac
