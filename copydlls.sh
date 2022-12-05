@@ -20,5 +20,8 @@ i686)
 	exit 1
 esac
 
-cp -a `ldd dist.$arch/lib/*.dll | awk '/mingw'$bit'/{print $3}' |
-	sort -u | grep -v 'lib\(crypto\|ssl\)'` dist.$arch/lib
+ldd dist.$arch/lib/*.dll |
+	awk '/mingw'$bit'/{print $3}' |
+	sort -u |
+	sed '/lib\(crypto\|ssl\)/d' |
+	xargs -r cp -a -t dist.$arch/lib
