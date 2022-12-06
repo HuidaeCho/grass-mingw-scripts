@@ -58,7 +58,8 @@ EOT
 done
 
 export MINGW_CHOST=$arch
-export PATH="$(dirname $(realpath $0)):$PATH"
+mingw64_bin=`pacman -Ql mingw-w64-x86_64-gcc | sed '/bin\/gcc\.exe$/!d; s/.* \|\|\/gcc.*//g'`
+export PATH="$(dirname $(realpath $0)):$mingw64_bin:$PATH"
 
 echo "Started compilation: `date`"
 echo

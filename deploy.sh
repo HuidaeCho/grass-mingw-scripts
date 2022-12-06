@@ -25,8 +25,6 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 
-grass_mingw_scripts=$(dirname $(realpath $0))
-
 # check architecture
 case "$MSYSTEM_CARCH" in
 x86_64)
@@ -42,7 +40,7 @@ i686)
 	exit 1
 esac
 
-export PATH="$grass_mingw_scripts:$PATH"
+export PATH="$(dirname $(realpath $0)):$PATH"
 
 build.sh --merge --addons --busybox --package
 
