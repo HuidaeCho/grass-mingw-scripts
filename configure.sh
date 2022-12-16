@@ -29,6 +29,8 @@ EOT
 	--with-freetype-includes=$OSGEO4W_ROOT/include/freetype2 \
 	--with-bzlib \
 	--with-netcdf \
+	--with-blas \
+	--with-lapack \
 	--with-cairo-ldflags=-lcairo \
 	--with-libpng=$GRASS_SRC/mswindows/osgeo4w/libpng-config \
 	--with-geos=$GRASS_SRC/mswindows/osgeo4w/geos-config \
