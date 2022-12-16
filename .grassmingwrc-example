@@ -18,5 +18,5 @@ GDAL_GRASS_SRC=$HOME/usr/local/src/gdal-grass
 GRASS_ADDONS_SRC=$GRASS_SRC-addons
 
 # https://www.gnu.org/software/libredwg/
-LIBREDWG_LIB=$HOME/usr/local/lib64
+LIBREDWG_LIB=$HOME/usr/local/lib
 LIBREDWG_INC=$HOME/usr/local/include
