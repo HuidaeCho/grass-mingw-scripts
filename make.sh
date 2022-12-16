@@ -40,7 +40,10 @@ case "$opt" in
 	;;
 -a|-A|--addons|--addon)
 	[ "$opt" = "--addons" ] && cd $GRASS_ADDONS_SRC/src
+	# CFLAGS for v.feature.algebra
+	# https://stackoverflow.com/a/28566889/16079666
 	make \
+	CFLAGS="-Dsrandom=srand -Drandom=rand" \
 	MODULE_TOPDIR=$GRASS_SRC \
 	LIBREDWGLIBPATH=-L$LIBREDWG_LIB \
 	LIBREDWGINCPATH=-I$LIBREDWG_INC \
