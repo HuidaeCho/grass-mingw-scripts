@@ -24,7 +24,7 @@ EOT
 	./configure \
 	--host=$MINGW_CHOST \
 	--with-includes=$OSGEO4W_ROOT/include \
-	--with-libs=$OSGEO4W_ROOT/lib \
+	--with-libs="$OSGEO4W_ROOT/lib $OSGEO4W_ROOT/bin" \
 	--with-nls \
 	--with-freetype-includes=$OSGEO4W_ROOT/include/freetype2 \
 	--with-bzlib \
