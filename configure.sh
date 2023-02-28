@@ -36,7 +36,8 @@ EOT
 	--with-geos=$GRASS_SRC/mswindows/osgeo4w/geos-config \
 	--with-gdal=$GRASS_SRC/mswindows/osgeo4w/gdal-config \
 	--with-liblas=$GRASS_SRC/mswindows/osgeo4w/liblas-config \
-	--with-opengl=windows
+	--with-opengl=windows \
+	--without-pdal
 	;;
 -g|--gdal)
 	cd $GDAL_GRASS_SRC
