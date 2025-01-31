@@ -21,8 +21,8 @@ IF EXIST "%ProgramFiles%\RStudio\bin\rstudio.exe" set PATH=%PATH%;%ProgramFiles%
 REM set R_USER if %USERPROFILE%\Documents\R\ exists to catch most common cases of private R libraries
 IF EXIST "%USERPROFILE%\Documents\R\" set R_USER=%USERPROFILE%\Documents\
 
-set PYTHONHOME=%OSGEO4W_ROOT%\apps\Python39
-set PATH=%OSGEO4W_ROOT%\apps\msys\bin;%OSGEO4W_ROOT%\apps\Python39;%OSGEO4W_ROOT%\apps\Python39\Scripts;%PATH%
+set PYTHONHOME=%OSGEO4W_ROOT%\apps\Python312
+set PATH=%OSGEO4W_ROOT%\apps\msys\bin;%OSGEO4W_ROOT%\apps\Python312;%OSGEO4W_ROOT%\apps\Python312\Scripts;%PATH%
 
 rem If GRASS_SH is externally defined, that shell will be used; Otherwise,
 rem GISBASE\etc\sh.bat will be used if it exists; If not, cmd.exe will be used;

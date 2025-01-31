@@ -40,7 +40,7 @@ Again, 32-bit systems were not tested.
    export LC_ALL=C
    export PATH="/c/osgeo4w/bin:/mingw64/bin:$PATH"
    export PROJ_LIB="/c/osgeo4w/share/proj"
-   export PYTHONHOME="/c/osgeo4w/apps/python39"
+   export PYTHONHOME="/c/osgeo4w/apps/python312"
    EOT
 
    # source ~/.bash_profile
